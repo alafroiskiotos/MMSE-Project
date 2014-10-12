@@ -40,6 +40,8 @@ public class ApplicationWindow {
 	private JPanel panelLogin;
 	private JPanel panelCustomer;
 	private JTextField txtLicencePlate;
+	private JTextField txtCustomerPhone;
+	private JTextField txtCustomerEmail;
 	
 
 	/**
@@ -121,27 +123,27 @@ public class ApplicationWindow {
 		panelCustomer.setLayout(null);
 		
 		txtCustomerName = new JTextField();
-		txtCustomerName.setBounds(200, 68, 134, 28);
+		txtCustomerName.setBounds(200, 30, 134, 28);
 		panelCustomer.add(txtCustomerName);
 		txtCustomerName.setColumns(10);
 		
 		JLabel lblName = new JLabel("Name");
-		lblName.setBounds(100, 74, 61, 16);
+		lblName.setBounds(137, 35, 36, 16);
 		panelCustomer.add(lblName);
 		
 		txtLicencePlate = new JTextField();
-		txtLicencePlate.setBounds(200, 108, 134, 28);
+		txtLicencePlate.setBounds(200, 60, 134, 28);
 		panelCustomer.add(txtLicencePlate);
 		txtLicencePlate.setColumns(10);
 		
 		JLabel lblLicencePlate = new JLabel("Licence Plate");
-		lblLicencePlate.setBounds(69, 114, 92, 16);
+		lblLicencePlate.setBounds(92, 65, 81, 16);
 		panelCustomer.add(lblLicencePlate);
 		
 		final JTextArea txtAccidentDescription = new JTextArea();
 		txtAccidentDescription.setRows(10);
 		txtAccidentDescription.setColumns(10);
-		txtAccidentDescription.setBounds(200, 148, 213, 80);
+		txtAccidentDescription.setBounds(200, 160, 200, 75);
 		panelCustomer.add(txtAccidentDescription);
 		
 		JButton btnAccidentSubmit = new JButton("Submit");
@@ -151,7 +153,9 @@ public class ApplicationWindow {
 				String customerName = txtCustomerName.getText();
 				String accidentDescription = txtAccidentDescription.getText();
 				String licencePlate = txtLicencePlate.getText();
-				CustomerForm formData = new CustomerForm(customerName, accidentDescription, licencePlate);
+				String customerPhone = txtCustomerPhone.getText();
+				String customerEmail = txtCustomerEmail.getText();
+				CustomerForm formData = new CustomerForm(customerName, accidentDescription, licencePlate, customerPhone, customerEmail);
 				formfunc.addCustomerForm(formData);
 				//Integer hello = formfunc.getCustomerForms().size();
 				//System.out.println(hello);
@@ -161,12 +165,30 @@ public class ApplicationWindow {
 		panelCustomer.add(btnAccidentSubmit);
 		
 		JLabel lblAccidentDescription = new JLabel("Accident Description");
-		lblAccidentDescription.setBounds(26, 148, 147, 16);
+		lblAccidentDescription.setBounds(40, 160, 135, 16);
 		panelCustomer.add(lblAccidentDescription);
 		
 		JLabel lblReportAndAccident = new JLabel("Report an Accident");
-		lblReportAndAccident.setBounds(149, 22, 134, 16);
+		lblReportAndAccident.setBounds(148, 6, 134, 16);
 		panelCustomer.add(lblReportAndAccident);
+		
+		txtCustomerPhone = new JTextField();
+		txtCustomerPhone.setBounds(200, 90, 134, 28);
+		panelCustomer.add(txtCustomerPhone);
+		txtCustomerPhone.setColumns(10);
+		
+		JLabel lblTelephone = new JLabel("Telephone");
+		lblTelephone.setBounds(110, 95, 68, 16);
+		panelCustomer.add(lblTelephone);
+		
+		txtCustomerEmail = new JTextField();
+		txtCustomerEmail.setBounds(200, 120, 134, 28);
+		panelCustomer.add(txtCustomerEmail);
+		txtCustomerEmail.setColumns(10);
+		
+		JLabel lblEmail = new JLabel("Email");
+		lblEmail.setBounds(138, 125, 35, 16);
+		panelCustomer.add(lblEmail);
 		
 		JPanel panelCDA = new JPanel();
 		panelCDA.setVisible(false);

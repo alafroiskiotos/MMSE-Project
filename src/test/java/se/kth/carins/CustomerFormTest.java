@@ -18,10 +18,10 @@ public class CustomerFormTest {
 	
 	@BeforeClass
 	public static void Before() {
-		form0 = new CustomerForm("name", "accident", "iet4583");
+		form0 = new CustomerForm("name", "accident", "iet4583","078181818", "test@email.se");
 		customerFormFunc = new CustomerFormFunc();
 		customerFormFunc.addCustomerForm(form0);
-		form1 = new CustomerForm("anetos", "drunk", "oet2345");
+		form1 = new CustomerForm("anetos", "drunk", "oet2345", "078181818", "test@email.se");
 		customerFormFunc.addCustomerForm(form1);
 	}
 	
@@ -39,6 +39,8 @@ public class CustomerFormTest {
 		assertEquals("name", form0.getCustomerName());
 		assertEquals("accident", form0.getAccidentDesc());
 		assertEquals("iet4583", form0.getLicensePlate());
+		assertEquals("078181818", form0.getCustomerPhone());
+		assertEquals("test@email.se", form0.getCustomerEmail());
 	}
 	
 }
