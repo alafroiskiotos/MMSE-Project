@@ -3,34 +3,43 @@ package se.kth.carins.gui;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+
 import java.awt.GridBagLayout;
 import java.awt.FlowLayout;
+
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JLabel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.CardLayout;
 import java.awt.Panel;
+
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+
+import se.kth.carins.Business.CustomerFormFunc;
+import se.kth.carins.Entities.CustomerForm;
 
 public class ApplicationWindow {
 
 	private JFrame frmCarInsurance;
-	private JTextField textField;
-	private JPasswordField passwordField;
-	private JTextField txtAdf;
+	private JTextField txtUsername;
+	private JPasswordField txtPassword;
+	private JTextField txtCustomerName;
 	private JPanel panelLogin;
 	private JPanel panelCustomer;
-	private JTextField textField_1;
+	private JTextField txtLicencePlate;
 	
 
 	/**
@@ -70,74 +79,86 @@ public class ApplicationWindow {
 		frmCarInsurance.getContentPane().add(panelLogin, "name_1413134037279670000");
 		panelLogin.setLayout(null);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(179, 61, 134, 28);
-		panelLogin.add(textField);
+		txtUsername = new JTextField();
+		txtUsername.setColumns(10);
+		txtUsername.setBounds(178, 60, 134, 28);
+		panelLogin.add(txtUsername);
 		
-		passwordField = new JPasswordField();
-		passwordField.setColumns(10);
-		passwordField.setBounds(178, 112, 134, 28);
-		panelLogin.add(passwordField);
+		txtPassword = new JPasswordField();
+		txtPassword.setColumns(10);
+		txtPassword.setBounds(178, 112, 134, 28);
+		panelLogin.add(txtPassword);
 		
-		JButton button = new JButton("Submit");
-		button.addActionListener(new ActionListener() {
+		JButton btnLoginSubmit = new JButton("Submit");
+		btnLoginSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		button.setBounds(179, 146, 134, 29);
-		panelLogin.add(button);
+		btnLoginSubmit.setBounds(179, 146, 134, 29);
+		panelLogin.add(btnLoginSubmit);
 		
 		JLabel label = new JLabel("Username");
-		label.setBounds(54, 66, 88, 16);
+		label.setBounds(78, 66, 88, 16);
 		panelLogin.add(label);
 		
 		JLabel label_1 = new JLabel("Password");
-		label_1.setBounds(50, 121, 79, 16);
+		label_1.setBounds(78, 118, 88, 16);
 		panelLogin.add(label_1);
 		
-		JButton button_1 = new JButton("Customers click here");
-		button_1.addActionListener(new ActionListener() {
+		JButton btnGoToCustomerForm = new JButton("Customers click here");
+		btnGoToCustomerForm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelLogin.setVisible(false);
 				panelCustomer.setVisible(true);
 			}
 		});
-		button_1.setBounds(105, 226, 177, 29);
-		panelLogin.add(button_1);
+		btnGoToCustomerForm.setBounds(112, 226, 177, 29);
+		panelLogin.add(btnGoToCustomerForm);
 
 		panelCustomer = new JPanel();
 		panelCustomer.setVisible(false);
 		frmCarInsurance.getContentPane().add(panelCustomer, "name_1413135446784299000");
 		panelCustomer.setLayout(null);
 		
-		txtAdf = new JTextField();
-		txtAdf.setBounds(200, 68, 134, 28);
-		panelCustomer.add(txtAdf);
-		txtAdf.setColumns(10);
+		txtCustomerName = new JTextField();
+		txtCustomerName.setBounds(200, 68, 134, 28);
+		panelCustomer.add(txtCustomerName);
+		txtCustomerName.setColumns(10);
 		
 		JLabel lblName = new JLabel("Name");
 		lblName.setBounds(100, 74, 61, 16);
 		panelCustomer.add(lblName);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(200, 108, 134, 28);
-		panelCustomer.add(textField_1);
-		textField_1.setColumns(10);
+		txtLicencePlate = new JTextField();
+		txtLicencePlate.setBounds(200, 108, 134, 28);
+		panelCustomer.add(txtLicencePlate);
+		txtLicencePlate.setColumns(10);
 		
 		JLabel lblLicencePlate = new JLabel("Licence Plate");
 		lblLicencePlate.setBounds(69, 114, 92, 16);
 		panelCustomer.add(lblLicencePlate);
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setRows(10);
-		textArea.setColumns(10);
-		textArea.setBounds(200, 148, 213, 80);
-		panelCustomer.add(textArea);
+		final JTextArea txtAccidentDescription = new JTextArea();
+		txtAccidentDescription.setRows(10);
+		txtAccidentDescription.setColumns(10);
+		txtAccidentDescription.setBounds(200, 148, 213, 80);
+		panelCustomer.add(txtAccidentDescription);
 		
-		JButton btnSubmit = new JButton("Submit");
-		btnSubmit.setBounds(149, 240, 117, 29);
-		panelCustomer.add(btnSubmit);
+		JButton btnAccidentSubmit = new JButton("Submit");
+		btnAccidentSubmit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CustomerFormFunc formfunc = new CustomerFormFunc();
+				String customerName = txtCustomerName.getText();
+				String accidentDescription = txtAccidentDescription.getText();
+				String licencePlate = txtLicencePlate.getText();
+				CustomerForm formData = new CustomerForm(customerName, accidentDescription, licencePlate);
+				formfunc.addCustomerForm(formData);
+				//Integer hello = formfunc.getCustomerForms().size();
+				//System.out.println(hello);
+ 			}
+		});
+		btnAccidentSubmit.setBounds(149, 240, 117, 29);
+		panelCustomer.add(btnAccidentSubmit);
 		
 		JLabel lblAccidentDescription = new JLabel("Accident Description");
 		lblAccidentDescription.setBounds(26, 148, 147, 16);
