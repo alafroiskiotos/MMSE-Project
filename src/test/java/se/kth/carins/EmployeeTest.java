@@ -15,7 +15,8 @@ public class EmployeeTest {
 	
 	@BeforeClass
 	public static void Before() {
-		employee = new Employee("name", "1234", "finance");
+		char[] pwd = { '1', '2', '3', '4'};
+		employee = new Employee("name", pwd, "finance");
 		users = new UsersFunc();
 		users.addUser(employee);
 	}
@@ -27,12 +28,15 @@ public class EmployeeTest {
 
 	@Test
 	public void password() {
-		assertEquals("1234", employee.getPassword());
+		char[] pwd = { '1', '2', '3', '4'};
+		assertArrayEquals(pwd, employee.getPassword());
+		//assertEquals(pwd, employee.getPassword());
 	}
 	
 	@Test
 	public void authenticate() {
-		assertEquals("finance", users.getUser("name", "1234"));
-		assertEquals("0", users.getUser("name", "12345"));
+		char[] pwd = { '1', '2', '3', '4'};
+		assertEquals("finance", users.getUser("name", pwd));
+		assertEquals("0", users.getUser("notexistingname", pwd));
 	}
 }

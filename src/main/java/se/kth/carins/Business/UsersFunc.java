@@ -1,5 +1,6 @@
 package se.kth.carins.Business;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,14 +20,13 @@ public class UsersFunc {
 		systemUsers.add(employee);
 	}
 	
-	public String getUser(String username, String password) {
+	public String getUser(String username, char[] password) {
 		Iterator<Employee> iterator = systemUsers.iterator();
 		String result = "0";
 		
 		while(iterator.hasNext()) {
 			Employee tmpUser = iterator.next();
-			
-			if (username.equals(tmpUser.getUsername()) && password.equals(tmpUser.getPassword())){
+			if (username.equals(tmpUser.getUsername()) && Arrays.equals(password , tmpUser.getPassword())){
 				result = tmpUser.getAcl();
 			}
 		}

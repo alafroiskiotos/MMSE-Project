@@ -2,10 +2,10 @@ package se.kth.carins.Entities;
 
 public class Employee {
 	private String username;
-	private String password;
+	char[] password;
 	private String acl;
 	
-	public Employee(String username, String password, String acl) {
+	public Employee(String username, char[] password, String acl) {
 		this.username = username;
 		this.password = password;
 		this.acl = acl;
@@ -14,7 +14,7 @@ public class Employee {
 	public String getUsername() {
 		return username;
 	}
-	public String getPassword() {
+	public char[] getPassword() {
 		return password;
 	}
 	public String getAcl() {
