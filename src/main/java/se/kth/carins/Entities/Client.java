@@ -41,10 +41,4 @@ public class Client {
 	public List<Claim> getClaimHistory() {
 		return claimHistory;
 	}
-	
-	public Integer getNumberOfClaims() {
-		return claimHistory.size();
-	}
-
-	
 }
