@@ -13,17 +13,21 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import javax.swing.JLabel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.CardLayout;
 import java.awt.Panel;
+import java.awt.Dimension;
 
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -31,11 +35,20 @@ import javax.swing.JTextArea;
 import se.kth.carins.Business.ClientFunc;
 import se.kth.carins.Business.CustomerFormFunc;
 import se.kth.carins.Business.UsersFunc;
+import se.kth.carins.Entities.Claim;
 import se.kth.carins.Entities.Client;
 import se.kth.carins.Entities.CustomerForm;
 import se.kth.carins.Entities.Employee;
 
 import java.awt.SystemColor;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.swing.JList;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class ApplicationWindow {
 
@@ -49,10 +62,24 @@ public class ApplicationWindow {
 	private JPanel panelFinance;
 	private JPanel panelAfterCustomerForm;
 	private JPanel panelCustomer;
+	private JPanel panelAddClient;
 	private JTextField txtLicencePlate;
 	private JTextField txtCustomerPhone;
 	private JTextField txtCustomerEmail;
 	private JLabel lblInvalidUsernameOr;
+	private JLabel lblUserAdded;
+	private JTextField txtClientName;
+	private JTextField txtClientEmail;
+	private JTextField txtClientPhone;
+	private JTextField txtClientLicencePlate;
+	private ClientFunc clientfunc;
+	private JButton btnClientAddSubmit;
+	private JButton btnNewButton;
+	private JTable formTable;
+	private JScrollPane scrollPane;
+	private Employee loggedEmployee;
+	
+	private CustomerFormFunc formfunc;
 
 
 	/**
@@ -81,7 +108,7 @@ public class ApplicationWindow {
 
 	// Insert Data
 	public void initializeData() {
-		CustomerFormFunc formfunc = new CustomerFormFunc();
+		formfunc = new CustomerFormFunc();
 		CustomerForm formData = new CustomerForm("nikos", "accidentDescription", "licencePlate", "anestos@kth.se", "customerPhone");
 		CustomerForm formDataz = new CustomerForm("antonis", "accidentDescription", "licencePlate", "antonis@kth.se", "customerPhone");
 		formfunc.addCustomerForm(formData);
@@ -97,7 +124,7 @@ public class ApplicationWindow {
 		userfunc.addUser(employeeCDB);
 		
 		
-		ClientFunc clientfunc = new ClientFunc();
+		clientfunc = new ClientFunc();
 		Client client = new Client("nikos","anestos@kth.se","customerPhone", "licencePlate");
 		Client client1 = new Client("client1", "email1", "phone1", "licensePlate1");
 		Client client2 = new Client("client2", "email2", "phone2", "licensePlate2");
@@ -143,7 +170,8 @@ public class ApplicationWindow {
 				UsersFunc userfunc = new UsersFunc();
 				String authenticated = "0";
 				authenticated = userfunc.getUser(username, password);
-
+				
+				
 				if (authenticated == "CDA") {
 					panelLogin.setVisible(false);
 					panelCDA.setVisible(true);
@@ -221,7 +249,7 @@ public class ApplicationWindow {
 		JButton btnAccidentSubmit = new JButton("Submit");
 		btnAccidentSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CustomerFormFunc formfunc = new CustomerFormFunc();
+				formfunc = new CustomerFormFunc();
 				String customerName = txtCustomerName.getText();
 				String accidentDescription = txtAccidentDescription.getText();
 				String licencePlate = txtLicencePlate.getText();
@@ -273,6 +301,8 @@ public class ApplicationWindow {
 		panelCDA.setVisible(false);
 		frmCarInsurance.getContentPane().add(panelCDA, "name_1413135463172740000");
 		panelCDA.setLayout(null);
+		
+
 
 		panelCDB = new JPanel();
 		panelCDB.setVisible(false);
@@ -283,7 +313,17 @@ public class ApplicationWindow {
 		panelFinance.setVisible(false);
 		frmCarInsurance.getContentPane().add(panelFinance, "name_1413135501609176000");
 		panelFinance.setLayout(null);
-
+		
+		JButton btnAddClient = new JButton("Add Client");
+		btnAddClient.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelAddClient.setVisible(true);
+				panelFinance.setVisible(false);
+			}
+		});
+		btnAddClient.setBounds(25, 6, 117, 29);
+		panelFinance.add(btnAddClient);
+		
 		panelAfterCustomerForm = new JPanel();
 		panelAfterCustomerForm.setVisible(false);
 		frmCarInsurance.getContentPane().add(panelAfterCustomerForm, "name_1413142865239629000");
@@ -300,7 +340,7 @@ public class ApplicationWindow {
 				panelLogin.setVisible(true);
 			}
 		});
-		btnGoBack.setBounds(63, 140, 117, 29);
+		btnGoBack.setBounds(64, 140, 117, 29);
 		panelAfterCustomerForm.add(btnGoBack);
 
 		JButton btnExit = new JButton("Exit");
@@ -311,7 +351,219 @@ public class ApplicationWindow {
 		});
 		btnExit.setBounds(249, 140, 117, 29);
 		panelAfterCustomerForm.add(btnExit);
-			
+		
+		panelAddClient = new JPanel();
+		frmCarInsurance.getContentPane().add(panelAddClient, "name_1413205905273841000");
+		panelAddClient.setLayout(null);
+		
+		btnClientAddSubmit = new JButton("Submit");
+		btnClientAddSubmit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String clientName = txtClientName.getText();
+				String clientEmail = txtClientEmail.getText();
+				String clientPhone = txtClientPhone.getText();
+				String clientLicencePlate = txtClientLicencePlate.getText();
+				Client client = new Client(clientName,clientEmail,clientPhone, clientLicencePlate);
+				clientfunc.addClient(client);
+				txtClientName.setText("");
+				txtClientEmail.setText("");
+				txtClientPhone.setText("");
+				txtClientLicencePlate.setText("");
+				txtClientName.setEnabled(false);
+				txtClientEmail.setEnabled(false);
+				txtClientPhone.setEnabled(false);
+				txtClientLicencePlate.setEnabled(false);
+				btnNewButton.setEnabled(true);
+				lblUserAdded.setText("User Added to the system");
+				btnClientAddSubmit.setEnabled(false);
+
+			}
+		});
+		btnClientAddSubmit.setBounds(29, 215, 117, 29);
+		panelAddClient.add(btnClientAddSubmit);
+		
+		JButton btnClientAddBack = new JButton("Back");
+		btnClientAddBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblUserAdded.setText("");
+				panelAddClient.setVisible(false);
+				panelFinance.setVisible(true);
+			}
+		});
+		btnClientAddBack.setBounds(289, 215, 117, 29);
+		panelAddClient.add(btnClientAddBack);
+		
+		JLabel lblAddNewClient = new JLabel("Add New Client");
+		lblAddNewClient.setBounds(158, 21, 104, 16);
+		panelAddClient.add(lblAddNewClient);
+		
+		txtClientName = new JTextField();
+		txtClientName.setBounds(158, 49, 134, 28);
+		panelAddClient.add(txtClientName);
+		txtClientName.setColumns(10);
+		
+		txtClientEmail = new JTextField();
+		txtClientEmail.setBounds(158, 89, 134, 28);
+		panelAddClient.add(txtClientEmail);
+		txtClientEmail.setColumns(10);
+		
+		txtClientPhone = new JTextField();
+		txtClientPhone.setBounds(158, 129, 134, 28);
+		panelAddClient.add(txtClientPhone);
+		txtClientPhone.setColumns(10);
+		
+		txtClientLicencePlate = new JTextField();
+		txtClientLicencePlate.setBounds(158, 156, 134, 28);
+		panelAddClient.add(txtClientLicencePlate);
+		txtClientLicencePlate.setColumns(10);
+		
+		JLabel lblName_1 = new JLabel("Name");
+		lblName_1.setBounds(49, 55, 61, 16);
+		panelAddClient.add(lblName_1);
+		
+		JLabel lblEmail_1 = new JLabel("Email");
+		lblEmail_1.setBounds(49, 95, 61, 16);
+		panelAddClient.add(lblEmail_1);
+		
+		JLabel lblPhone = new JLabel("Phone");
+		lblPhone.setBounds(49, 135, 61, 16);
+		panelAddClient.add(lblPhone);
+		
+		JLabel lblLicencePlate_1 = new JLabel("Licence Plate");
+		lblLicencePlate_1.setBounds(49, 162, 97, 16);
+		panelAddClient.add(lblLicencePlate_1);
+		
+		lblUserAdded = new JLabel("");
+		lblUserAdded.setBounds(82, 190, 272, 16);
+		panelAddClient.add(lblUserAdded);
+		
+		btnNewButton = new JButton("Add New");
+		btnNewButton.setEnabled(false);
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblUserAdded.setText("");
+				btnClientAddSubmit.setEnabled(true);
+				txtClientName.setEnabled(true);
+				txtClientEmail.setEnabled(true);
+				txtClientPhone.setEnabled(true);
+				txtClientLicencePlate.setEnabled(true);				
+				btnNewButton.setEnabled(false);
+			}
+		});
+		btnNewButton.setBounds(160, 215, 117, 29);
+		panelAddClient.add(btnNewButton);
+		
+		JButton btnLogoutAddClient = new JButton("Logout");
+		btnLogoutAddClient.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelAddClient.setVisible(false);
+				panelLogin.setVisible(true);
+			}
+		});
+		btnLogoutAddClient.setBounds(361, 6, 83, 29);
+		panelAddClient.add(btnLogoutAddClient);
+		
+		JButton btnLogoutFinance = new JButton("Logout");
+		btnLogoutFinance.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelFinance.setVisible(false);
+				panelLogin.setVisible(true);
+			}
+		});
+		btnLogoutFinance.setBounds(361, 6, 83, 29);
+		panelFinance.add(btnLogoutFinance);
+
+		JButton btnLogoutCDB = new JButton("Logout");
+		btnLogoutCDB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelCDB.setVisible(false);
+				panelLogin.setVisible(true);
+			}
+		});
+		btnLogoutCDB.setBounds(361, 6, 83, 29);
+		panelCDB.add(btnLogoutCDB);
+		
+		JButton btnLogoutCDA = new JButton("Logout");
+		btnLogoutCDA.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelCDA.setVisible(false);
+				panelLogin.setVisible(true);
+			}
+		});
+		btnLogoutCDA.setBounds(361, 6, 83, 29);
+		panelCDA.add(btnLogoutCDA);
+		
+		JButton btnRegisterClaim = new JButton("Register Claim");
+		btnRegisterClaim.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int toregister = formTable.getSelectedRow();
+				CustomerForm customerform = formfunc.getCustomerForms().get(toregister);
+				Claim claim = new Claim("john", "crash", "yar3425", "0703485", "john@mail.se", loggedEmployee);
+				System.out.println(customerform.getCustomerEmail());
+			}
+		});
+		btnRegisterClaim.setBounds(35, 245, 117, 30);
+		panelCDA.add(btnRegisterClaim);
+		
+		JButton btnDeleteAccident = new JButton("Delete Accident");
+		btnDeleteAccident.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int todelete = formTable.getSelectedRow();
+				formfunc.getCustomerForms().remove(todelete);
+				panelCDA.setVisible(false);
+				panelCDA.setVisible(true);
+			}
+		});
+		btnDeleteAccident.setBounds(180, 245, 130, 30);
+		panelCDA.add(btnDeleteAccident);
+
+		panelCDA.addComponentListener(new ComponentAdapter() {
+			public void componentHidden(ComponentEvent evt) {
+				panelCDA.remove(formTable);
+				panelCDA.remove(scrollPane);
+			}
+	        public void componentShown(ComponentEvent evt) {
+	       
+	        	String[] columnNames = {"Name",
+	                    "Email",
+	                    "Phone",
+	                    "Licence Plate",
+	                    "Accident Description",
+	                    "Client"};
+	        	
+	        	int length = formfunc.getCustomerForms().size();
+	    		Object[][] dataz = new Object[length][6];
+	    		for (int i = 0; i < length; i++) {
+	    			CustomerForm lala = formfunc.getCustomerForms().get(i);
+	    				dataz[i][0] = lala.getCustomerName();
+	    				dataz[i][1] = lala.getCustomerEmail();
+	    				dataz[i][2] = lala.getCustomerPhone();
+	    				dataz[i][3] = lala.getLicensePlate();
+	    				dataz[i][4] = lala.getAccidentDesc();
+	    				dataz[i][5] = clientfunc.isClient(lala);
+	    		}
+	    		
+	    		
+	    		formTable = new JTable(dataz, columnNames);
+	    		formTable.setBounds(49, 232, 368, -165);
+	    		panelCDA.add(formTable);
+	    		formTable.setPreferredScrollableViewportSize(new Dimension(500, 100));
+	    	    formTable.setFillsViewportHeight(true);
+	    		formTable.setVisible(true);
+	    		
+	    	    scrollPane = new JScrollPane(formTable);
+	    	    scrollPane.setLocation(15, 15);
+	    	    scrollPane.setSize(350, 200);
+	    	    scrollPane.setOpaque(true);
+	    	    panelCDA.add(scrollPane);
+	        }
+
+	     });
+		
+		
+		
+
+		
 
 	}
 }
