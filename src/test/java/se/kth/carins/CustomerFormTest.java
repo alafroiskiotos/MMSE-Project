@@ -18,10 +18,10 @@ public class CustomerFormTest {
 	
 	@BeforeClass
 	public static void Before() {
-		form0 = new CustomerForm("name", "accident", "iet4583","078181818", "test@email.se");
+		form0 = new CustomerForm("name", "accident", "iet4583", "test@email.se", "078181818");
 		customerFormFunc = new CustomerFormFunc();
 		customerFormFunc.addCustomerForm(form0);
-		form1 = new CustomerForm("anetos", "drunk", "oet2345", "078181818", "test@email.se");
+		form1 = new CustomerForm("anetos", "drunk", "oet2345", "test@email.se", "078181818");
 		customerFormFunc.addCustomerForm(form1);
 	}
 	
