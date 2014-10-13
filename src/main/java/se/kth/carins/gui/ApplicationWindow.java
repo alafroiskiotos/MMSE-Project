@@ -28,8 +28,10 @@ import java.awt.Panel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import se.kth.carins.Business.ClientFunc;
 import se.kth.carins.Business.CustomerFormFunc;
 import se.kth.carins.Business.UsersFunc;
+import se.kth.carins.Entities.Client;
 import se.kth.carins.Entities.CustomerForm;
 import se.kth.carins.Entities.Employee;
 
@@ -80,8 +82,8 @@ public class ApplicationWindow {
 	// Insert Data
 	public void initializeData() {
 		CustomerFormFunc formfunc = new CustomerFormFunc();
-		CustomerForm formData = new CustomerForm("nikos", "accidentDescription", "licencePlate", "customerPhone", "anestos@kth.se");
-		CustomerForm formDataz = new CustomerForm("antonis", "accidentDescription", "licencePlate", "customerPhone", "antonis@kth.se");
+		CustomerForm formData = new CustomerForm("nikos", "accidentDescription", "licencePlate", "anestos@kth.se", "customerPhone");
+		CustomerForm formDataz = new CustomerForm("antonis", "accidentDescription", "licencePlate", "antonis@kth.se", "customerPhone");
 		formfunc.addCustomerForm(formData);
 		formfunc.addCustomerForm(formDataz);
 		
@@ -93,6 +95,19 @@ public class ApplicationWindow {
 		userfunc.addUser(employeeFinance);
 		userfunc.addUser(employeeCDA);
 		userfunc.addUser(employeeCDB);
+		
+		
+		ClientFunc clientfunc = new ClientFunc();
+		Client client = new Client("nikos","anestos@kth.se","customerPhone", "licencePlate");
+		Client client1 = new Client("client1", "email1", "phone1", "licensePlate1");
+		Client client2 = new Client("client2", "email2", "phone2", "licensePlate2");
+		Client client3 = new Client("client3", "email3", "phone3", "licensePlate3");
+		Client client4 = new Client("client4", "email4", "phone4", "licensePlate4");
+		clientfunc.addClient(client);
+		clientfunc.addClient(client1);
+		clientfunc.addClient(client2);
+		clientfunc.addClient(client3);
+		clientfunc.addClient(client4);
 	}
 	
 	
@@ -132,12 +147,15 @@ public class ApplicationWindow {
 				if (authenticated == "CDA") {
 					panelLogin.setVisible(false);
 					panelCDA.setVisible(true);
+					lblInvalidUsernameOr.setText("");
 				} else if (authenticated == "CDB") {
 					panelLogin.setVisible(false);
 					panelCDB.setVisible(true);
+					lblInvalidUsernameOr.setText("");
 				} else if (authenticated == "finance") {
 					panelLogin.setVisible(false);
-					panelFinance.setVisible(true);					
+					panelFinance.setVisible(true);
+					lblInvalidUsernameOr.setText("");
 				} else {
 					lblInvalidUsernameOr.setText("Invalid Username or Password. Please try again");
 				}
@@ -164,6 +182,8 @@ public class ApplicationWindow {
 			public void actionPerformed(ActionEvent e) {
 				panelLogin.setVisible(false);
 				panelCustomer.setVisible(true);
+				lblInvalidUsernameOr.setText("");
+
 			}
 		});
 		btnGoToCustomerForm.setBounds(140, 200, 177, 60);
@@ -213,6 +233,11 @@ public class ApplicationWindow {
 				//System.out.println(hello);
 				panelCustomer.setVisible(false);
 				panelAfterCustomerForm.setVisible(true);
+				txtCustomerName.setText("");
+				txtLicencePlate.setText("");
+				txtCustomerEmail.setText("");
+				txtCustomerPhone.setText("");
+				txtAccidentDescription.setText("");
 			}
 		});
 		btnAccidentSubmit.setBounds(149, 240, 117, 29);

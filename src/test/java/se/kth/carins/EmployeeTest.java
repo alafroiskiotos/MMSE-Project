@@ -30,7 +30,6 @@ public class EmployeeTest {
 	public void password() {
 		char[] pwd = { '1', '2', '3', '4'};
 		assertArrayEquals(pwd, employee.getPassword());
-		//assertEquals(pwd, employee.getPassword());
 	}
 	
 	@Test
