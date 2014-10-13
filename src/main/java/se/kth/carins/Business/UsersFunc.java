@@ -33,4 +33,18 @@ public class UsersFunc {
 		
 		return result;
 	}
+	
+	public Employee getEmployee(String username, char[] password) {
+		Iterator<Employee> iterator = systemUsers.iterator();
+		Employee result = null;
+		
+		while(iterator.hasNext()) {
+			Employee tmpUser = iterator.next();
+			if (username.equals(tmpUser.getUsername()) && Arrays.equals(password , tmpUser.getPassword())){
+				result = tmpUser;
+			}
+		}
+		
+		return result;
+	}
 }

@@ -9,13 +9,16 @@ public class Claim extends CustomerForm {
 	private String category;
 	private Employee employee;
 	private Date registrationDate;
+	private Boolean paid;
 	
 	public Claim(String customerName, String accidentDesc, String licensePlate, String customerPhone,
 			String customerEmail, Employee employee) {
 		super(customerName, accidentDesc, licensePlate, customerEmail, customerPhone);
 		this.employee = employee;
 		this.registrationDate = new Date();
-		this.status = "Registered";
+		this.status = "registered";
+		this.cost = 0f;
+		this.paid = false;
 	}
 
 	public Float getCost() {
@@ -25,7 +28,15 @@ public class Claim extends CustomerForm {
 	public void setCost(Float cost) {
 		this.cost = cost;
 	}
-
+	
+	public void setPaid() {
+		this.paid = true;
+	}
+	
+	public Boolean getPaid() {
+		return this.paid;
+	}
+	
 	public String getStatus() {
 		return status;
 	}
