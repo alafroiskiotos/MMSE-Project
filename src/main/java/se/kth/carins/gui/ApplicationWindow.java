@@ -34,6 +34,7 @@ import javax.swing.JTextArea;
 
 import se.kth.carins.Business.ClaimFunc;
 import se.kth.carins.Business.ClientFunc;
+import se.kth.carins.Business.Communication;
 import se.kth.carins.Business.CustomerFormFunc;
 import se.kth.carins.Business.UsersFunc;
 import se.kth.carins.Entities.Claim;
@@ -49,6 +50,8 @@ import java.util.List;
 
 import javax.swing.JList;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 public class ApplicationWindow {
@@ -66,6 +69,7 @@ public class ApplicationWindow {
 	private JPanel panelAddClient;
 	private JPanel panelGarage;
 	private JPanel panelSearch;
+	private JPanel panelPaymentHistory;
 	private JTextField txtLicencePlate;
 	private JTextField txtCustomerPhone;
 	private JTextField txtCustomerEmail;
@@ -79,6 +83,8 @@ public class ApplicationWindow {
 	private ClientFunc clientfunc;
 	private JButton btnClientAddSubmit;
 	private JButton btnNewButton;
+	private JButton btnRegisterClaim;
+	private JButton btnShowRegisteredClaims;
 	private JTable formTable; 	
 	private JScrollPane scrollPane;	
 	private JTable formSearchTable;
@@ -87,6 +93,9 @@ public class ApplicationWindow {
 	private JScrollPane scrollFinancePane;	
 	private JTable formClaimTable;
 	private JScrollPane scrollClaimPane;
+	private JTable formPaymentTable;
+	private JScrollPane scrollPaymentPane;
+
 	private Employee loggedEmployee;
 
 	private CustomerFormFunc formfunc;
@@ -94,16 +103,15 @@ public class ApplicationWindow {
 	private JTextField txtGarageLicencePlate;
 	private JTextField txtGarageCost;
 	private JTextField txtSearchField;
-	
+
 	private JLabel lblSearchName;
 	private JLabel lblSearchEmail; 
 	private JLabel lblSearchPhone; 
 	private JLabel lblSearchLicencePlate;
+	private JLabel lblGarageInformed;
 
 
-	/**
-	 * Launch the application.
-	 */
+	/**  Launch the application. */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -117,9 +125,7 @@ public class ApplicationWindow {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
+	/** Create the application. */
 	public ApplicationWindow() {
 		initializeData();
 		initialize();
@@ -178,9 +184,7 @@ public class ApplicationWindow {
 	}
 
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+	/**  Initialize the contents of the frame.  */
 	private void initialize() {
 		frmCarInsurance = new JFrame();
 		frmCarInsurance.setTitle("Car Insurance");
@@ -237,6 +241,7 @@ public class ApplicationWindow {
 				}
 			}
 		});
+		
 		btnLoginSubmit.setBounds(180, 132, 135, 30);
 		panelLogin.add(btnLoginSubmit);
 
@@ -262,6 +267,7 @@ public class ApplicationWindow {
 
 			}
 		});
+		
 		btnGoToCustomerForm.setBounds(378, 44, 177, 60);
 		panelLogin.add(btnGoToCustomerForm);
 
@@ -289,6 +295,7 @@ public class ApplicationWindow {
 		panelCustomer.add(lblLicencePlate);
 
 		final JTextArea txtAccidentDescription = new JTextArea();
+		txtAccidentDescription.setLineWrap(true);
 		txtAccidentDescription.setRows(10);
 		txtAccidentDescription.setColumns(10);
 		txtAccidentDescription.setBounds(200, 160, 200, 75);
@@ -315,6 +322,7 @@ public class ApplicationWindow {
 				txtAccidentDescription.setText("");
 			}
 		});
+		
 		btnAccidentSubmit.setBounds(149, 240, 117, 29);
 		panelCustomer.add(btnAccidentSubmit);
 
@@ -368,6 +376,7 @@ public class ApplicationWindow {
 				panelFinance.setVisible(false);
 			}
 		});
+		
 		btnAddClient.setBounds(457, 325, 120, 30);
 		panelFinance.add(btnAddClient);
 
@@ -387,6 +396,7 @@ public class ApplicationWindow {
 				panelLogin.setVisible(true);
 			}
 		});
+		
 		btnGoBack.setBounds(64, 140, 117, 29);
 		panelAfterCustomerForm.add(btnGoBack);
 
@@ -396,6 +406,7 @@ public class ApplicationWindow {
 				System.exit(0);
 			}
 		});
+		
 		btnExit.setBounds(249, 140, 117, 29);
 		panelAfterCustomerForm.add(btnExit);
 
@@ -426,6 +437,7 @@ public class ApplicationWindow {
 
 			}
 		});
+		
 		btnClientAddSubmit.setBounds(29, 295, 117, 30);
 		panelAddClient.add(btnClientAddSubmit);
 
@@ -437,6 +449,7 @@ public class ApplicationWindow {
 				panelFinance.setVisible(true);
 			}
 		});
+		
 		btnClientAddBack.setBounds(353, 295, 117, 30);
 		panelAddClient.add(btnClientAddBack);
 
@@ -497,6 +510,7 @@ public class ApplicationWindow {
 				btnNewButton.setEnabled(false);
 			}
 		});
+		
 		btnNewButton.setBounds(193, 295, 117, 30);
 		panelAddClient.add(btnNewButton);
 
@@ -508,6 +522,7 @@ public class ApplicationWindow {
 				loggedEmployee = null;
 			}
 		});
+		
 		btnLogoutAddClient.setBounds(491, 6, 85, 30);
 		panelAddClient.add(btnLogoutAddClient);
 
@@ -519,9 +534,10 @@ public class ApplicationWindow {
 				loggedEmployee = null;
 			}
 		});
+		
 		btnLogoutFinance.setBounds(491, 6, 85, 30);
 		panelFinance.add(btnLogoutFinance);
-		
+
 		JButton btnFinancePay = new JButton("Pay");
 		btnFinancePay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -535,13 +551,21 @@ public class ApplicationWindow {
 				panelFinance.setVisible(true);
 			}
 		});
+		
 		btnFinancePay.setBounds(10, 325, 90, 30);
 		panelFinance.add(btnFinancePay);
-		
+
 		JButton btnViewPaymentHistory = new JButton("View Payment history");
-		btnViewPaymentHistory.setBounds(301, 325, 150, 30);
-		panelFinance.add(btnViewPaymentHistory);
+		btnViewPaymentHistory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelFinance.setVisible(false);
+				panelPaymentHistory.setVisible(true);
+			}
+		});
 		
+		btnViewPaymentHistory.setBounds(266, 325, 185, 30);
+		panelFinance.add(btnViewPaymentHistory);
+
 		JButton btnSearchFinance = new JButton("Search");
 		btnSearchFinance.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -549,6 +573,7 @@ public class ApplicationWindow {
 				panelSearch.setVisible(true);
 			}
 		});
+		
 		btnSearchFinance.setBounds(491, 40, 85, 30);
 		panelFinance.add(btnSearchFinance);
 
@@ -559,9 +584,10 @@ public class ApplicationWindow {
 				panelSearch.setVisible(true);
 			}
 		});
+		
 		btnSearchCDA.setBounds(491, 40, 85, 30);
 		panelCDA.add(btnSearchCDA);
-		
+
 		JButton btnSearchCDB= new JButton("Search");
 		btnSearchCDB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -569,9 +595,10 @@ public class ApplicationWindow {
 				panelSearch.setVisible(true);
 			}
 		});
+		
 		btnSearchCDB.setBounds(491, 40, 85, 30);
 		panelCDB.add(btnSearchCDB);
-		
+
 		JButton btnLogoutCDB = new JButton("Logout");
 		btnLogoutCDB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -580,7 +607,7 @@ public class ApplicationWindow {
 				loggedEmployee = null;
 			}
 		});
-		
+
 		JButton btnSearchAddClient = new JButton("Search");
 		btnSearchAddClient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -588,16 +615,13 @@ public class ApplicationWindow {
 				panelSearch.setVisible(true);
 			}
 		});
+		
 		btnSearchAddClient.setBounds(491, 40, 85, 30);
 		panelAddClient.add(btnSearchAddClient);
 
-		
-
-		
-		
 		btnLogoutCDB.setBounds(491, 6, 85, 30);
 		panelCDB.add(btnLogoutCDB);
-		
+
 		JButton btnOrderPayment = new JButton("Order Payment");
 		btnOrderPayment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -611,9 +635,10 @@ public class ApplicationWindow {
 
 			}
 		});
-		btnOrderPayment.setBounds(47, 303, 136, 29);
-		panelCDB.add(btnOrderPayment);
 		
+		btnOrderPayment.setBounds(10, 325, 136, 29);
+		panelCDB.add(btnOrderPayment);
+
 		JButton btnRejectPayment = new JButton("Reject Payment");
 		btnRejectPayment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -626,8 +651,19 @@ public class ApplicationWindow {
 				panelCDB.setVisible(true);
 			}
 		});
-		btnRejectPayment.setBounds(225, 303, 144, 29);
+		
+		btnRejectPayment.setBounds(150, 325, 144, 29);
 		panelCDB.add(btnRejectPayment);
+		
+		JButton btnCheckNewAccidents = new JButton("Check New Accidents");
+		btnCheckNewAccidents.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelCDB.setVisible(false);
+				panelCDA.setVisible(true);
+			}
+		});
+		btnCheckNewAccidents.setBounds(400, 325, 160, 30);
+		panelCDB.add(btnCheckNewAccidents);
 
 		JButton btnLogoutCDA = new JButton("Logout");
 		btnLogoutCDA.addActionListener(new ActionListener() {
@@ -637,18 +673,27 @@ public class ApplicationWindow {
 				loggedEmployee = null;
 			}
 		});
+		
 		btnLogoutCDA.setBounds(491, 6, 85, 30);
 		panelCDA.add(btnLogoutCDA);
 
-		JButton btnRegisterClaim = new JButton("Register Claim");
+		btnRegisterClaim = new JButton("Register Claim");
+		btnRegisterClaim.setEnabled(false);
 		btnRegisterClaim.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				int toregister = formTable.getSelectedRow();
 				CustomerForm customerform = formfunc.getCustomerForms().get(toregister);
+				
+				Client client0 = clientfunc.getClient(customerform.getCustomerName(), customerform.getLicensePlate());
+				
+				if (clientfunc.hasRegisteredClaim(customerform)) {			
+					lblGarageInformed.setText("This claim is already register. Delete it.");
+					btnRegisterClaim.setEnabled(false);
+				} else {
+				
 				Claim claim = new Claim(customerform.getCustomerName(), customerform.getAccidentDesc(), 
 						customerform.getLicensePlate(), customerform.getCustomerPhone(), customerform.getCustomerEmail(), loggedEmployee);
-
-				Client client0 = clientfunc.getClient(customerform.getCustomerName(), customerform.getLicensePlate());
 
 				if (clientfunc.hasHistory(client0) > 0)
 					claim.setCategory("complex");
@@ -657,15 +702,19 @@ public class ApplicationWindow {
 
 				claimfunc.addClaim(claim);
 				client0.addClaimToHistory(claim);
-
-
 				formfunc.getCustomerForms().remove(toregister);
+				
+				Communication com = new Communication();
+				String reply = com.informGarage(customerform.getLicensePlate());
+				
 				panelCDA.setVisible(false);
 				panelCDA.setVisible(true);
-
+				lblGarageInformed.setText(reply);
+				}
 			}
 		});
-		btnRegisterClaim.setBounds(35, 245, 117, 30);
+		
+		btnRegisterClaim.setBounds(10, 325, 117, 30);
 		panelCDA.add(btnRegisterClaim);
 
 		JButton btnDeleteAccident = new JButton("Delete Accident");
@@ -677,8 +726,25 @@ public class ApplicationWindow {
 				panelCDA.setVisible(true);
 			}
 		});
-		btnDeleteAccident.setBounds(180, 245, 130, 30);
+		
+		btnDeleteAccident.setBounds(140, 325, 130, 30);
 		panelCDA.add(btnDeleteAccident);
+		
+		lblGarageInformed = new JLabel("");
+		lblGarageInformed.setBounds(100, 300, 360, 15);
+		panelCDA.add(lblGarageInformed);
+		
+		btnShowRegisteredClaims = new JButton("Go back ");
+		btnShowRegisteredClaims.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelCDA.setVisible(false);
+				panelCDB.setVisible(true);
+				
+			}
+		});
+		btnShowRegisteredClaims.setBounds(400, 325, 160, 30);
+		panelCDA.add(btnShowRegisteredClaims);
+		btnShowRegisteredClaims.setVisible(false);
 
 		panelGarage = new JPanel();
 		frmCarInsurance.getContentPane().add(panelGarage, "name_1413220264189332000");
@@ -698,13 +764,17 @@ public class ApplicationWindow {
 					lblGarage.setText("Invalid Licence Plate");
 					txtGarageLicencePlate.setText("");
 				} else {
-					claimToAddCost.setCost(new Float(garageCost));
-					panelGarage.setVisible(false);
-					panelLogin.setVisible(true);
+					if (!garageCost.equals("")) {
+						claimToAddCost.setCost(new Float(garageCost));
+						txtGarageCost.setText("");
+						txtGarageLicencePlate.setText("");
+						panelGarage.setVisible(false);
+						panelLogin.setVisible(true);
+					}
 				}
-
 			}
 		});
+		
 		btnGarageSubmit.setBounds(221, 159, 115, 30);
 		panelGarage.add(btnGarageSubmit);
 
@@ -725,12 +795,12 @@ public class ApplicationWindow {
 		JLabel lblCost = new JLabel("Cost");
 		lblCost.setBounds(102, 125, 61, 16);
 		panelGarage.add(lblCost);
-		
+
 		panelSearch = new JPanel();
 		panelSearch.setVisible(false);
 		frmCarInsurance.getContentPane().add(panelSearch, "name_610164216064514");
 		panelSearch.setLayout(null);
-		
+
 		JButton btnLogout = new JButton("Logout");
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -739,14 +809,15 @@ public class ApplicationWindow {
 				loggedEmployee = null;
 			}
 		});
+		
 		btnLogout.setBounds(491, 6, 85, 30);
 		panelSearch.add(btnLogout);
-		
+
 		txtSearchField = new JTextField();
 		txtSearchField.setBounds(30, 30, 300, 30);
 		panelSearch.add(txtSearchField);
 		txtSearchField.setColumns(10);
-		
+
 		JButton btnSearchGo = new JButton("Go");
 		btnSearchGo.setBorder(null);
 		btnSearchGo.setBorderPainted(false);
@@ -755,29 +826,14 @@ public class ApplicationWindow {
 				lblSearchEmail.setText("");
 				lblSearchName.setText("");
 				lblSearchLicencePlate.setText("");
-				lblSearchPhone.setText("");
-				
-				String[] columnNames = {
-						"Accident Description",
-						"Category",
-						"Cost",
-						"Status",
-						"Paid",
-						"Registration Date",
-						"Employee"};
-				Object[][] dataz = new Object[1][1];
-				
-				formSearchTable = new JTable(dataz, columnNames);
-				
+				lblSearchPhone.setText("");	
+
 				if (formSearchTable != null) {
-					//formSearchTable.repaint();
-					//scrollSearchPane.removeAll();
-					//panelSearch.remove(formSearchTable);
-					//panelSearch.remove(scrollSearchPane);
-					//formSearchTable = null;
-					//panelSearch = null;
-					
+					panelSearch.remove(formSearchTable);
+					panelSearch.remove(scrollSearchPane);
+					panelSearch.repaint();					
 				}
+
 				String query = txtSearchField.getText();
 				Client client = clientfunc.searchClient(query);
 
@@ -785,17 +841,24 @@ public class ApplicationWindow {
 					lblSearchEmail.setText("Client Name, Email, Phone or Licence Plate" );					
 					lblSearchName.setText("Nothing found, please search using:");
 				} else {
-					// construct table me history
+					// construct table with history
 					lblSearchEmail.setText("Email: "+ client.getEmail());
 					lblSearchName.setText("Name: "+ client.getName());
 					lblSearchLicencePlate.setText("Licence Plate: "+ client.getLicensePlate());
 					lblSearchPhone.setText("Phone: "+ client.getPhone());
-					
-				
+
+					String[] columnNames = {
+							"Accident Description",
+							"Category",
+							"Cost",
+							"Status",
+							"Paid",
+							"Registration Date",
+					"Employee"};
 
 					int length = client.getClaimHistory().size();
-					dataz = new Object[length][7];
-					
+					Object[][] dataz = new Object[length][7];
+
 					List<Claim> clientClaims = client.getClaimHistory();
 					for (int i = 0; i < length; i++) {
 						Claim lala = clientClaims.get(i);
@@ -808,7 +871,6 @@ public class ApplicationWindow {
 						dataz[i][6] = lala.getEmployee().getUsername();
 					}
 
-					
 					formSearchTable = new JTable(dataz, columnNames);
 					formSearchTable.setBounds(49, 232, 368, -165);
 					panelSearch.add(formSearchTable);
@@ -822,39 +884,42 @@ public class ApplicationWindow {
 					scrollSearchPane.setSize(500, 220);
 					scrollSearchPane.setOpaque(true);
 					panelSearch.add(scrollSearchPane);
-					//
-					
-					
-					
-					
-					
-					
-					
 				};
 			}
 		});
-		btnSearchGo.setBounds(330, 29, 50, 32);
-		panelSearch.add(btnSearchGo);
 		
+		btnSearchGo.setBounds(330, 28, 50, 30);
+		panelSearch.add(btnSearchGo);
+
 		lblSearchName = new JLabel("");
 		lblSearchName.setBounds(30, 70, 250, 15);
 		panelSearch.add(lblSearchName);
-		
+
 		lblSearchEmail = new JLabel("");
 		lblSearchEmail.setBounds(30, 90, 250, 15);
 		panelSearch.add(lblSearchEmail);
-		
+
 		lblSearchPhone = new JLabel("");
 		lblSearchPhone.setBounds(300, 70, 200, 15);
 		panelSearch.add(lblSearchPhone);
-		
+
 		lblSearchLicencePlate = new JLabel("");
 		lblSearchLicencePlate.setBounds(300, 90, 200, 15);
 		panelSearch.add(lblSearchLicencePlate);
-		
+
 		JButton btnSearchBack = new JButton("Back");
 		btnSearchBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				lblSearchName.setText("");
+				lblSearchEmail.setText("");
+				lblSearchPhone.setText("");
+				lblSearchLicencePlate.setText("");
+				if (formSearchTable != null) {
+					panelSearch.remove(formSearchTable);
+					panelSearch.remove(scrollSearchPane);
+					panelSearch.repaint();
+				}
+				txtSearchField.setText("");
 				String authenticated = loggedEmployee.getAcl();;
 
 				if (authenticated == "CDA") {
@@ -865,13 +930,41 @@ public class ApplicationWindow {
 					panelFinance.setVisible(true);
 				} 				
 				panelSearch.setVisible(false);
-				
+
 			}
 		});
+		
 		btnSearchBack.setBounds(491, 40, 85, 30);
 		panelSearch.add(btnSearchBack);
-
 		
+		panelPaymentHistory = new JPanel();
+		frmCarInsurance.getContentPane().add(panelPaymentHistory, "name_617643924390979");
+		panelPaymentHistory.setLayout(null);
+		
+		JButton btnLogoutPaymentHistory = new JButton("Logout");
+		btnLogoutPaymentHistory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelPaymentHistory.setVisible(false);
+				panelLogin.setVisible(true);
+				loggedEmployee = null;
+			}
+		});
+		
+		btnLogoutPaymentHistory.setBounds(491, 6, 85, 30);
+		panelPaymentHistory.add(btnLogoutPaymentHistory);
+		
+		JButton btnPaymentHistoryBack = new JButton("Back");
+		btnPaymentHistoryBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelPaymentHistory.setVisible(false);
+				panelFinance.setVisible(true);
+			}
+		});
+		
+		btnPaymentHistoryBack.setBounds(491, 40, 85, 30);
+		panelPaymentHistory.add(btnPaymentHistoryBack);
+
+
 		// CDA Table Construct
 		panelCDA.addComponentListener(new ComponentAdapter() {
 			public void componentHidden(ComponentEvent evt) {
@@ -879,7 +972,14 @@ public class ApplicationWindow {
 				panelCDA.remove(scrollPane);
 			}
 			public void componentShown(ComponentEvent evt) {
-
+				
+				
+				if (loggedEmployee.getAcl().equals("CDB")) {
+					btnShowRegisteredClaims.setVisible(true);
+				}
+				
+				
+				lblGarageInformed.setText("");
 				String[] columnNames = {"Name",
 						"Email",
 						"Phone",
@@ -888,7 +988,7 @@ public class ApplicationWindow {
 				"Client"};
 
 				int length = formfunc.getCustomerForms().size();
-				Object[][] dataz = new Object[length][6];
+				final Object[][] dataz = new Object[length][6];
 				for (int i = 0; i < length; i++) {
 					CustomerForm lala = formfunc.getCustomerForms().get(i);
 					dataz[i][0] = lala.getCustomerName();
@@ -908,14 +1008,27 @@ public class ApplicationWindow {
 				formTable.setVisible(true);
 
 				scrollPane = new JScrollPane(formTable);
-				scrollPane.setLocation(15, 15);
-				scrollPane.setSize(350, 200);
+				scrollPane.setLocation(10, 10);
+				scrollPane.setSize(450, 300);
 				scrollPane.setOpaque(true);
 				panelCDA.add(scrollPane);
+				
+				
+				formTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+			        public void valueChanged(ListSelectionEvent event) {
+			        	lblGarageInformed.setText("");
+			        	Integer row = formTable.getSelectedRow();
+			        	Boolean what = (Boolean) dataz[row][5];
+			        	if (what) {
+			        		btnRegisterClaim.setEnabled(true);
+			        	} else {
+			        		btnRegisterClaim.setEnabled(false);
+			        	}
+			        }
+			    });
 			}
-
 		});
-
+		
 		// CDB Table Construct
 		panelCDB.addComponentListener(new ComponentAdapter() {
 			public void componentHidden(ComponentEvent evt) {
@@ -945,7 +1058,6 @@ public class ApplicationWindow {
 					dataz[i][6] = lala.getCost();
 				}
 
-
 				formClaimTable = new JTable(dataz, columnNames);
 				formClaimTable.setBounds(49, 232, 368, -165);
 				panelCDB.add(formClaimTable);
@@ -954,14 +1066,13 @@ public class ApplicationWindow {
 				formClaimTable.setVisible(true);
 
 				scrollClaimPane = new JScrollPane(formClaimTable);
-				scrollClaimPane.setLocation(15, 15);
-				scrollClaimPane.setSize(350, 200);
+				scrollClaimPane.setLocation(10, 10);
+				scrollClaimPane.setSize(450, 300);
 				scrollClaimPane.setOpaque(true);
 				panelCDB.add(scrollClaimPane);
 			}
-
 		});
-		
+
 		// Finance Table Construct
 		panelFinance.addComponentListener(new ComponentAdapter() {
 			public void componentHidden(ComponentEvent evt) {
@@ -991,7 +1102,6 @@ public class ApplicationWindow {
 					dataz[i][6] = lala.getCost();
 				}
 
-
 				formFinanceTable = new JTable(dataz, columnNames);
 				formFinanceTable.setBounds(49, 232, 368, -165);
 				panelFinance.add(formFinanceTable);
@@ -1005,12 +1115,43 @@ public class ApplicationWindow {
 				scrollFinancePane.setOpaque(true);
 				panelFinance.add(scrollFinancePane);
 			}
-
 		});
 
+		panelPaymentHistory.addComponentListener(new ComponentAdapter() {
+			public void componentHidden(ComponentEvent evt) {
+				panelPaymentHistory.remove(formPaymentTable);
+				panelPaymentHistory.remove(scrollPaymentPane);
+			}
+			public void componentShown(ComponentEvent evt) {
 
+				String[] columnNames = {"Name",
+						"Email",
+						"Licence Plate",
+						"Cost"};
 
+				int length = claimfunc.filterClaims().size();
+				Object[][] dataz = new Object[length][4];
+				for (int i = 0; i < length; i++) {
+					Claim lala = claimfunc.filterClaims().get(i);
+					dataz[i][0] = lala.getCustomerName();
+					dataz[i][1] = lala.getCustomerEmail();
+					dataz[i][2] = lala.getLicensePlate();
+					dataz[i][3] = lala.getCost();
+				}
 
+				formPaymentTable = new JTable(dataz, columnNames);
+				formPaymentTable.setBounds(49, 232, 368, -165);
+				panelPaymentHistory.add(formPaymentTable);
+				formPaymentTable.setPreferredScrollableViewportSize(new Dimension(500, 100));
+				formPaymentTable.setFillsViewportHeight(true);
+				formPaymentTable.setVisible(true);
 
+				scrollPaymentPane = new JScrollPane(formPaymentTable);
+				scrollPaymentPane.setLocation(10, 10);
+				scrollPaymentPane.setSize(450, 300);
+				scrollPaymentPane.setOpaque(true);
+				panelPaymentHistory.add(scrollPaymentPane);
+			}
+		});
 	}
 }

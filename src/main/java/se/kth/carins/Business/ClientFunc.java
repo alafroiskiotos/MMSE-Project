@@ -61,6 +61,25 @@ public class ClientFunc {
 		
 		return result;
 	}
+
+	public boolean hasRegisteredClaim(CustomerForm form) {
+		String name = form.getCustomerName();
+		String email = form.getCustomerEmail();
+		String licencePlate = form.getLicensePlate();
+		boolean result = false;
+		Claim tmpClaim;
+		List<Claim> claims = getClient(name,licencePlate).getClaimHistory();
+		Iterator<Claim> iter = claims.iterator();
+		
+		while(iter.hasNext()) {
+			tmpClaim = iter.next();
+			if (new String("registered").equals(tmpClaim.getStatus())) {
+				result = true;
+				break;
+			}
+		}
+		return result;
+	}
 	
 	public boolean isClient(CustomerForm form) {
 		String name = form.getCustomerName();

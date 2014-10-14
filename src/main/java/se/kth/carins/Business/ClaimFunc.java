@@ -36,10 +36,23 @@ public class ClaimFunc {
 				result.add(tmpClaim);
 			}
 		}
-
 		return result;
 	}
 	
+	public List<Claim> filterClaims() {
+		List<Claim> result = new LinkedList<Claim>();
+		Claim tmpClaim;
+		Iterator<Claim> iter = claims.iterator();
+		
+		while(iter.hasNext()) {
+			tmpClaim = iter.next();
+			
+			if (tmpClaim.getPaid()) {
+				result.add(tmpClaim);
+			}
+		}
+		return result;
+	}
 	public void categorize(Claim claim) {
 		String name = claim.getCustomerName();
 		System.out.println(name);
