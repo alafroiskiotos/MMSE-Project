@@ -42,7 +42,22 @@ public class ClientFunc {
 				result = tmpClient;
 			}
 		}
-		//tmpClient = null;
+		
+		return result;
+	}
+	
+	public Client searchClient(String query) {
+		Client result = null;
+		Client tmpClient;
+		Iterator<Client> iter = clients.iterator();
+		
+		while(iter.hasNext()) {
+			tmpClient = iter.next();
+			
+			if (query.equals(tmpClient.getName()) || query.equals(tmpClient.getLicensePlate()) || query.equals(tmpClient.getEmail()) || query.equals(tmpClient.getPhone())) {
+				result = tmpClient;
+			}
+		}
 		
 		return result;
 	}
