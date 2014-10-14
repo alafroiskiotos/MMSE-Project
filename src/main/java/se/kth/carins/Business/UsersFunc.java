@@ -9,6 +9,7 @@ import se.kth.carins.storage.Storage;
 
 public class UsersFunc {
 	private List<Employee> systemUsers;
+	private Iterator<Employee> iterator;
 	
 	public UsersFunc() {
 		Storage storageInstance = Storage.getStorageInstance();
@@ -20,7 +21,7 @@ public class UsersFunc {
 	}
 	
 	public String getUser(String username, char[] password) {
-		Iterator<Employee> iterator = systemUsers.iterator();
+		iterator = systemUsers.iterator();
 		String result = "0";
 		
 		while(iterator.hasNext()) {
@@ -29,12 +30,13 @@ public class UsersFunc {
 				result = tmpUser.getAcl();
 			}
 		}
+		iterator = null;
 		
 		return result;
 	}
 	
 	public Employee getEmployee(String username, char[] password) {
-		Iterator<Employee> iterator = systemUsers.iterator();
+		iterator = systemUsers.iterator();
 		Employee result = null;
 		
 		while(iterator.hasNext()) {
@@ -43,6 +45,7 @@ public class UsersFunc {
 				result = tmpUser;
 			}
 		}
+		iterator = null;
 		
 		return result;
 	}

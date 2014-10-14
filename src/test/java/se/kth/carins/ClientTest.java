@@ -20,7 +20,7 @@ public class ClientTest {
 	
 	@BeforeClass
 	public static void Before() {
-		client = new Client("nikos", "anestos@kth.se", "0703485", "licencePlate");
+		client = new Client("nikos", "anestos@kth.se", "0703485", "licencePlate", "10000");
 		clientFunc = new ClientFunc();
 		clientFunc.addClient(client);
 		

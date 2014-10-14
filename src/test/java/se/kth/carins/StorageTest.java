@@ -47,7 +47,7 @@ public class StorageTest {
 		userFunc.addUser(employee);
 		assertEquals(1, storageInstance.getSystemUsersList().size());
 
-		Client client = new Client("nikos","anestos@kth.se","customerPhone", "licencePlate");
+		Client client = new Client("nikos","anestos@kth.se","customerPhone", "licencePlate", "10000");
 		clientFunc.addClient(client);
 		assertEquals(1, storageInstance.getClients().size());
 		

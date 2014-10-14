@@ -1,37 +1,20 @@
 package se.kth.carins.gui;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
-
-import java.awt.GridBagLayout;
-import java.awt.FlowLayout;
-
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-
 import javax.swing.JLabel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.CardLayout;
-import java.awt.Panel;
 import java.awt.Dimension;
-
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-
 import se.kth.carins.Business.ClaimFunc;
 import se.kth.carins.Business.ClientFunc;
 import se.kth.carins.Business.Communication;
@@ -41,18 +24,11 @@ import se.kth.carins.Entities.Claim;
 import se.kth.carins.Entities.Client;
 import se.kth.carins.Entities.CustomerForm;
 import se.kth.carins.Entities.Employee;
-
 import java.awt.SystemColor;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-
-import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
 
 public class ApplicationWindow {
 
@@ -61,8 +37,8 @@ public class ApplicationWindow {
 	private JPasswordField txtPassword;
 	private JTextField txtCustomerName;
 	private JPanel panelLogin;
-	private JPanel panelCDA;
 	private JPanel panelCDB;
+	private JPanel panelCDA;
 	private JPanel panelFinance;
 	private JPanel panelAfterCustomerForm;
 	private JPanel panelCustomer;
@@ -95,20 +71,18 @@ public class ApplicationWindow {
 	private JScrollPane scrollClaimPane;
 	private JTable formPaymentTable;
 	private JScrollPane scrollPaymentPane;
-
 	private Employee loggedEmployee;
-
 	private CustomerFormFunc formfunc;
 	private ClaimFunc claimfunc;
 	private JTextField txtGarageLicencePlate;
 	private JTextField txtGarageCost;
 	private JTextField txtSearchField;
-
 	private JLabel lblSearchName;
 	private JLabel lblSearchEmail; 
 	private JLabel lblSearchPhone; 
 	private JLabel lblSearchLicencePlate;
 	private JLabel lblGarageInformed;
+	private JTextField txtCarValue;
 
 
 	/**  Launch the application. */
@@ -141,22 +115,22 @@ public class ApplicationWindow {
 
 		UsersFunc userfunc = new UsersFunc();
 		char[] pwd = { '1', '2', '3', '4'};
-		Employee employeeFinance = new Employee("nikos", pwd, "finance");
-		Employee employeeCDA = new Employee("antonis", pwd, "CDA");
-		Employee employeeCDB = new Employee("asdf", pwd, "CDB");
-		Employee employeeGarage = new Employee("mitsos", pwd, "mastoris");
+		Employee employeeFinance = new Employee("finance", pwd, "finance");
+		Employee employeeCDB = new Employee("empolyeeCDB", pwd, "CDB");
+		Employee employeeCDA = new Employee("employeeCDA", pwd, "CDA");
+		Employee employeeGarage = new Employee("garage", pwd, "garage");
 		userfunc.addUser(employeeFinance);
-		userfunc.addUser(employeeCDA);
 		userfunc.addUser(employeeCDB);
+		userfunc.addUser(employeeCDA);
 		userfunc.addUser(employeeGarage);
 
 
 		clientfunc = new ClientFunc();
-		Client client = new Client("nikos","anestos@kth.se","customerPhone", "licencePlate");
-		Client client1 = new Client("client1", "email1", "phone1", "licencePlate1");
-		Client client2 = new Client("client2", "email2", "phone2", "licencePlate2");
-		Client client3 = new Client("client3", "email3", "phone3", "licencePlate3");
-		Client client4 = new Client("client4", "email4", "phone4", "licencePlate4");
+		Client client = new Client("nikos","anestos@kth.se","customerPhone", "licencePlate", "10000");
+		Client client1 = new Client("client1", "email1", "phone1", "licencePlate1", "10000");
+		Client client2 = new Client("client2", "email2", "phone2", "licencePlate2", "10000");
+		Client client3 = new Client("client3", "email3", "phone3", "licencePlate3", "10000");
+		Client client4 = new Client("client4", "email4", "phone4", "licencePlate4", "10000");
 		clientfunc.addClient(client);
 
 		clientfunc.addClient(client1);
@@ -166,9 +140,9 @@ public class ApplicationWindow {
 
 
 		claimfunc = new ClaimFunc();
-		Claim claim = new Claim("nikos","description","licencePlate","customerPhone","anestos@kth.se",employeeCDB);
-		Claim claim1 = new Claim("client1","description","licencePlate1","phone1","email1",employeeCDA);
-		Claim claim2 = new Claim("client2","description","licencePlate2","phone2","email2",employeeCDB);
+		Claim claim = new Claim("nikos","description","licencePlate","customerPhone","anestos@kth.se",employeeCDA);
+		Claim claim1 = new Claim("client1","description","licencePlate1","phone1","email1",employeeCDB);
+		Claim claim2 = new Claim("client2","description","licencePlate2","phone2","email2",employeeCDA);
 		claimfunc.addClaim(claim);
 		claimfunc.addClaim(claim1);
 		claimfunc.addClaim(claim2);
@@ -215,15 +189,15 @@ public class ApplicationWindow {
 				String authenticated = "0";
 				authenticated = userfunc.getUser(username, password);
 
-				if (authenticated == "CDA") {
+				if (authenticated == "CDB") {
 					panelLogin.setVisible(false);
-					panelCDA.setVisible(true);
+					panelCDB.setVisible(true);
 					lblInvalidUsernameOr.setText("");
 					loggedEmployee = userfunc.getEmployee(username, password);
 
-				} else if (authenticated == "CDB") {
+				} else if (authenticated == "CDA") {
 					panelLogin.setVisible(false);
-					panelCDB.setVisible(true);
+					panelCDA.setVisible(true);
 					lblInvalidUsernameOr.setText("");
 					loggedEmployee = userfunc.getEmployee(username, password);
 				} else if (authenticated == "finance") {
@@ -231,7 +205,7 @@ public class ApplicationWindow {
 					panelFinance.setVisible(true);
 					lblInvalidUsernameOr.setText("");
 					loggedEmployee = userfunc.getEmployee(username, password);
-				} else if (authenticated == "mastoris") {
+				} else if (authenticated == "garage") {
 					panelLogin.setVisible(false);
 					panelGarage.setVisible(true);
 					lblInvalidUsernameOr.setText("");
@@ -352,17 +326,17 @@ public class ApplicationWindow {
 		lblEmail.setBounds(138, 125, 35, 16);
 		panelCustomer.add(lblEmail);
 
-		panelCDA = new JPanel();
-		panelCDA.setVisible(false);
-		frmCarInsurance.getContentPane().add(panelCDA, "name_1413135463172740000");
-		panelCDA.setLayout(null);
-
-
-
 		panelCDB = new JPanel();
 		panelCDB.setVisible(false);
-		frmCarInsurance.getContentPane().add(panelCDB, "name_1413135468390753000");
+		frmCarInsurance.getContentPane().add(panelCDB, "name_1413135463172740000");
 		panelCDB.setLayout(null);
+
+
+
+		panelCDA = new JPanel();
+		panelCDA.setVisible(false);
+		frmCarInsurance.getContentPane().add(panelCDA, "name_1413135468390753000");
+		panelCDA.setLayout(null);
 
 		panelFinance = new JPanel();
 		panelFinance.setVisible(false);
@@ -421,16 +395,19 @@ public class ApplicationWindow {
 				String clientEmail = txtClientEmail.getText();
 				String clientPhone = txtClientPhone.getText();
 				String clientLicencePlate = txtClientLicencePlate.getText();
-				Client client = new Client(clientName,clientEmail,clientPhone, clientLicencePlate);
+				String carValue = txtCarValue.getText();
+				Client client = new Client(clientName,clientEmail,clientPhone, clientLicencePlate, carValue);
 				clientfunc.addClient(client);
 				txtClientName.setText("");
 				txtClientEmail.setText("");
 				txtClientPhone.setText("");
 				txtClientLicencePlate.setText("");
+				txtCarValue.setText("");
 				txtClientName.setEnabled(false);
 				txtClientEmail.setEnabled(false);
 				txtClientPhone.setEnabled(false);
 				txtClientLicencePlate.setEnabled(false);
+				txtCarValue.setEnabled(false);
 				btnNewButton.setEnabled(true);
 				lblUserAdded.setText("User Added to the system");
 				btnClientAddSubmit.setEnabled(false);
@@ -494,7 +471,7 @@ public class ApplicationWindow {
 		panelAddClient.add(lblLicencePlate_1);
 
 		lblUserAdded = new JLabel("");
-		lblUserAdded.setBounds(82, 190, 272, 16);
+		lblUserAdded.setBounds(104, 268, 272, 16);
 		panelAddClient.add(lblUserAdded);
 
 		btnNewButton = new JButton("Add New");
@@ -506,7 +483,8 @@ public class ApplicationWindow {
 				txtClientName.setEnabled(true);
 				txtClientEmail.setEnabled(true);
 				txtClientPhone.setEnabled(true);
-				txtClientLicencePlate.setEnabled(true);				
+				txtClientLicencePlate.setEnabled(true);	
+				txtCarValue.setEnabled(true);
 				btnNewButton.setEnabled(false);
 			}
 		});
@@ -577,18 +555,7 @@ public class ApplicationWindow {
 		btnSearchFinance.setBounds(491, 40, 85, 30);
 		panelFinance.add(btnSearchFinance);
 
-		JButton btnSearchCDA = new JButton("Search");
-		btnSearchCDA.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				panelCDA.setVisible(false);
-				panelSearch.setVisible(true);
-			}
-		});
-		
-		btnSearchCDA.setBounds(491, 40, 85, 30);
-		panelCDA.add(btnSearchCDA);
-
-		JButton btnSearchCDB= new JButton("Search");
+		JButton btnSearchCDB = new JButton("Search");
 		btnSearchCDB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelCDB.setVisible(false);
@@ -599,10 +566,21 @@ public class ApplicationWindow {
 		btnSearchCDB.setBounds(491, 40, 85, 30);
 		panelCDB.add(btnSearchCDB);
 
-		JButton btnLogoutCDB = new JButton("Logout");
-		btnLogoutCDB.addActionListener(new ActionListener() {
+		JButton btnSearchCDA= new JButton("Search");
+		btnSearchCDA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				panelCDB.setVisible(false);
+				panelCDA.setVisible(false);
+				panelSearch.setVisible(true);
+			}
+		});
+		
+		btnSearchCDA.setBounds(491, 40, 85, 30);
+		panelCDA.add(btnSearchCDA);
+
+		JButton btnLogoutCDA = new JButton("Logout");
+		btnLogoutCDA.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelCDA.setVisible(false);
 				panelLogin.setVisible(true);
 				loggedEmployee = null;
 			}
@@ -618,9 +596,18 @@ public class ApplicationWindow {
 		
 		btnSearchAddClient.setBounds(491, 40, 85, 30);
 		panelAddClient.add(btnSearchAddClient);
+		
+		txtCarValue = new JTextField();
+		txtCarValue.setBounds(193, 206, 134, 28);
+		panelAddClient.add(txtCarValue);
+		txtCarValue.setColumns(10);
+		
+		JLabel lblCarValue = new JLabel("Car Value");
+		lblCarValue.setBounds(100, 217, 59, 14);
+		panelAddClient.add(lblCarValue);
 
-		btnLogoutCDB.setBounds(491, 6, 85, 30);
-		panelCDB.add(btnLogoutCDB);
+		btnLogoutCDA.setBounds(491, 6, 85, 30);
+		panelCDA.add(btnLogoutCDA);
 
 		JButton btnOrderPayment = new JButton("Order Payment");
 		btnOrderPayment.addActionListener(new ActionListener() {
@@ -630,14 +617,14 @@ public class ApplicationWindow {
 				Claim claimToRegister = claimfunc.filterClaims("registered").get(toregister);
 				claimToRegister.setStatus("OK");
 
-				panelCDB.setVisible(false);
-				panelCDB.setVisible(true);
+				panelCDA.setVisible(false);
+				panelCDA.setVisible(true);
 
 			}
 		});
 		
 		btnOrderPayment.setBounds(10, 325, 136, 29);
-		panelCDB.add(btnOrderPayment);
+		panelCDA.add(btnOrderPayment);
 
 		JButton btnRejectPayment = new JButton("Reject Payment");
 		btnRejectPayment.addActionListener(new ActionListener() {
@@ -647,35 +634,35 @@ public class ApplicationWindow {
 				Claim claimToRegister = claimfunc.filterClaims("registered").get(toregister);
 				claimToRegister.setStatus("archived");
 
-				panelCDB.setVisible(false);
-				panelCDB.setVisible(true);
+				panelCDA.setVisible(false);
+				panelCDA.setVisible(true);
 			}
 		});
 		
 		btnRejectPayment.setBounds(150, 325, 144, 29);
-		panelCDB.add(btnRejectPayment);
+		panelCDA.add(btnRejectPayment);
 		
 		JButton btnCheckNewAccidents = new JButton("Check New Accidents");
 		btnCheckNewAccidents.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				panelCDB.setVisible(false);
-				panelCDA.setVisible(true);
+				panelCDA.setVisible(false);
+				panelCDB.setVisible(true);
 			}
 		});
 		btnCheckNewAccidents.setBounds(400, 325, 160, 30);
-		panelCDB.add(btnCheckNewAccidents);
+		panelCDA.add(btnCheckNewAccidents);
 
-		JButton btnLogoutCDA = new JButton("Logout");
-		btnLogoutCDA.addActionListener(new ActionListener() {
+		JButton btnLogoutCDB = new JButton("Logout");
+		btnLogoutCDB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				panelCDA.setVisible(false);
+				panelCDB.setVisible(false);
 				panelLogin.setVisible(true);
 				loggedEmployee = null;
 			}
 		});
 		
-		btnLogoutCDA.setBounds(491, 6, 85, 30);
-		panelCDA.add(btnLogoutCDA);
+		btnLogoutCDB.setBounds(491, 6, 85, 30);
+		panelCDB.add(btnLogoutCDB);
 
 		btnRegisterClaim = new JButton("Register Claim");
 		btnRegisterClaim.setEnabled(false);
@@ -695,7 +682,7 @@ public class ApplicationWindow {
 				Claim claim = new Claim(customerform.getCustomerName(), customerform.getAccidentDesc(), 
 						customerform.getLicensePlate(), customerform.getCustomerPhone(), customerform.getCustomerEmail(), loggedEmployee);
 
-				if (clientfunc.hasHistory(client0) > 0)
+				if (clientfunc.hasHistory(client0) > 0 || Integer.parseInt(client0.getCarValue()) > 15000)
 					claim.setCategory("complex");
 				else
 					claim.setCategory("simple");
@@ -707,43 +694,43 @@ public class ApplicationWindow {
 				Communication com = new Communication();
 				String reply = com.informGarage(customerform.getLicensePlate());
 				
-				panelCDA.setVisible(false);
-				panelCDA.setVisible(true);
+				panelCDB.setVisible(false);
+				panelCDB.setVisible(true);
 				lblGarageInformed.setText(reply);
 				}
 			}
 		});
 		
 		btnRegisterClaim.setBounds(10, 325, 117, 30);
-		panelCDA.add(btnRegisterClaim);
+		panelCDB.add(btnRegisterClaim);
 
 		JButton btnDeleteAccident = new JButton("Delete Accident");
 		btnDeleteAccident.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int todelete = formTable.getSelectedRow();
 				formfunc.getCustomerForms().remove(todelete);
-				panelCDA.setVisible(false);
-				panelCDA.setVisible(true);
+				panelCDB.setVisible(false);
+				panelCDB.setVisible(true);
 			}
 		});
 		
 		btnDeleteAccident.setBounds(140, 325, 130, 30);
-		panelCDA.add(btnDeleteAccident);
+		panelCDB.add(btnDeleteAccident);
 		
 		lblGarageInformed = new JLabel("");
 		lblGarageInformed.setBounds(100, 300, 360, 15);
-		panelCDA.add(lblGarageInformed);
+		panelCDB.add(lblGarageInformed);
 		
 		btnShowRegisteredClaims = new JButton("Go back ");
 		btnShowRegisteredClaims.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				panelCDA.setVisible(false);
-				panelCDB.setVisible(true);
+				panelCDB.setVisible(false);
+				panelCDA.setVisible(true);
 				
 			}
 		});
 		btnShowRegisteredClaims.setBounds(400, 325, 160, 30);
-		panelCDA.add(btnShowRegisteredClaims);
+		panelCDB.add(btnShowRegisteredClaims);
 		btnShowRegisteredClaims.setVisible(false);
 
 		panelGarage = new JPanel();
@@ -922,10 +909,10 @@ public class ApplicationWindow {
 				txtSearchField.setText("");
 				String authenticated = loggedEmployee.getAcl();;
 
-				if (authenticated == "CDA") {
-					panelCDA.setVisible(true);
-				} else if (authenticated == "CDB") {
+				if (authenticated == "CDB") {
 					panelCDB.setVisible(true);
+				} else if (authenticated == "CDA") {
+					panelCDA.setVisible(true);
 				} else if (authenticated == "finance") {
 					panelFinance.setVisible(true);
 				} 				
@@ -965,16 +952,16 @@ public class ApplicationWindow {
 		panelPaymentHistory.add(btnPaymentHistoryBack);
 
 
-		// CDA Table Construct
-		panelCDA.addComponentListener(new ComponentAdapter() {
+		// CDB Table Construct
+		panelCDB.addComponentListener(new ComponentAdapter() {
 			public void componentHidden(ComponentEvent evt) {
-				panelCDA.remove(formTable);
-				panelCDA.remove(scrollPane);
+				panelCDB.remove(formTable);
+				panelCDB.remove(scrollPane);
 			}
 			public void componentShown(ComponentEvent evt) {
 				
 				
-				if (loggedEmployee.getAcl().equals("CDB")) {
+				if (loggedEmployee.getAcl().equals("CDA")) {
 					btnShowRegisteredClaims.setVisible(true);
 				}
 				
@@ -1002,7 +989,7 @@ public class ApplicationWindow {
 
 				formTable = new JTable(dataz, columnNames);
 				formTable.setBounds(49, 232, 368, -165);
-				panelCDA.add(formTable);
+				panelCDB.add(formTable);
 				formTable.setPreferredScrollableViewportSize(new Dimension(500, 100));
 				formTable.setFillsViewportHeight(true);
 				formTable.setVisible(true);
@@ -1011,7 +998,7 @@ public class ApplicationWindow {
 				scrollPane.setLocation(10, 10);
 				scrollPane.setSize(450, 300);
 				scrollPane.setOpaque(true);
-				panelCDA.add(scrollPane);
+				panelCDB.add(scrollPane);
 				
 				
 				formTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -1029,11 +1016,11 @@ public class ApplicationWindow {
 			}
 		});
 		
-		// CDB Table Construct
-		panelCDB.addComponentListener(new ComponentAdapter() {
+		// CDA Table Construct
+		panelCDA.addComponentListener(new ComponentAdapter() {
 			public void componentHidden(ComponentEvent evt) {
-				panelCDB.remove(formClaimTable);
-				panelCDB.remove(scrollClaimPane);
+				panelCDA.remove(formClaimTable);
+				panelCDA.remove(scrollClaimPane);
 			}
 			public void componentShown(ComponentEvent evt) {
 
@@ -1060,7 +1047,7 @@ public class ApplicationWindow {
 
 				formClaimTable = new JTable(dataz, columnNames);
 				formClaimTable.setBounds(49, 232, 368, -165);
-				panelCDB.add(formClaimTable);
+				panelCDA.add(formClaimTable);
 				formClaimTable.setPreferredScrollableViewportSize(new Dimension(500, 100));
 				formClaimTable.setFillsViewportHeight(true);
 				formClaimTable.setVisible(true);
@@ -1069,7 +1056,7 @@ public class ApplicationWindow {
 				scrollClaimPane.setLocation(10, 10);
 				scrollClaimPane.setSize(450, 300);
 				scrollClaimPane.setOpaque(true);
-				panelCDB.add(scrollClaimPane);
+				panelCDA.add(scrollClaimPane);
 			}
 		});
 

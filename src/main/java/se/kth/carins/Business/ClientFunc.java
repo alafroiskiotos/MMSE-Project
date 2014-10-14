@@ -10,6 +10,9 @@ import se.kth.carins.storage.Storage;
 
 public class ClientFunc {
 	private List<Client> clients;
+	private Iterator<Client> iterator;
+	private Client result = null;
+	private Boolean resultBool = false;
 	
 	public ClientFunc() {
 		Storage storageInstance = Storage.getStorageInstance();
@@ -31,33 +34,37 @@ public class ClientFunc {
 	}
 	
 	public Client getClient(String name, String licencePlate) {
-		Client result = null;
 		Client tmpClient;
-		Iterator<Client> iter = clients.iterator();
+		result = null;
+		iterator = null;
+		iterator = clients.iterator();
 		
-		while(iter.hasNext()) {
-			tmpClient = iter.next();
+		while(iterator.hasNext()) {
+			tmpClient = iterator.next();
 			
 			if (name.equals(tmpClient.getName()) && licencePlate.equals(tmpClient.getLicensePlate())) {
 				result = tmpClient;
 			}
 		}
+		iterator = null;
 		
 		return result;
 	}
 	
 	public Client searchClient(String query) {
-		Client result = null;
 		Client tmpClient;
-		Iterator<Client> iter = clients.iterator();
+		iterator = null;
+		result = null;
+		iterator = clients.iterator();
 		
-		while(iter.hasNext()) {
-			tmpClient = iter.next();
+		while(iterator.hasNext()) {
+			tmpClient = iterator.next();
 			
 			if (query.equals(tmpClient.getName()) || query.equals(tmpClient.getLicensePlate()) || query.equals(tmpClient.getEmail()) || query.equals(tmpClient.getPhone())) {
 				result = tmpClient;
 			}
 		}
+		iterator = null;
 		
 		return result;
 	}
@@ -65,7 +72,7 @@ public class ClientFunc {
 	public boolean hasRegisteredClaim(CustomerForm form) {
 		String name = form.getCustomerName();
 		String licencePlate = form.getLicensePlate();
-		boolean result = false;
+		resultBool = false;
 		Claim tmpClaim;
 		List<Claim> claims = getClient(name,licencePlate).getClaimHistory();
 		Iterator<Claim> iter = claims.iterator();
@@ -73,31 +80,33 @@ public class ClientFunc {
 		while(iter.hasNext()) {
 			tmpClaim = iter.next();
 			if (new String("registered").equals(tmpClaim.getStatus())) {
-				result = true;
+				resultBool = true;
 				break;
 			}
 		}
-		return result;
+		return resultBool;
 	}
 	
 	public boolean isClient(CustomerForm form) {
 		String name = form.getCustomerName();
 		String email = form.getCustomerEmail();
 		String licensePlate = form.getLicensePlate();
-		boolean result = false;
+		resultBool = false;
+		iterator = null;
 		Client tmpClient;
 		
-		Iterator<Client> iter = clients.iterator();
+		iterator = clients.iterator();
 		
-		while(iter.hasNext()) {
-			tmpClient = iter.next();
+		while(iterator.hasNext()) {
+			tmpClient = iterator.next();
 			if (name.equals(tmpClient.getName()) && email.equals(tmpClient.getEmail()) &&
 					licensePlate.equals(tmpClient.getLicensePlate())) {
-				result = true;
+				resultBool = true;
 				break;
 			}
 		}
+		iterator = null;
 		
-		return result;
+		return resultBool;
 	}
 }

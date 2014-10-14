@@ -9,6 +9,9 @@ import se.kth.carins.storage.Storage;
 
 public class ClaimFunc {
 	private List<Claim> claims;
+	private Iterator<Claim> iterator;
+	private Claim tmpClaim;
+	private List<Claim> result;
 	
 	public ClaimFunc() {
 		Storage storageInstance = Storage.getStorageInstance();
@@ -24,49 +27,55 @@ public class ClaimFunc {
 	}
 	
 	public List<Claim> filterClaims(String status) {
-		List<Claim> result = new LinkedList<Claim>();
-		Claim tmpClaim;
-		Iterator<Claim> iter = claims.iterator();
+		result = new LinkedList<Claim>();
+		iterator = claims.iterator();
 		
-		while(iter.hasNext()) {
-			tmpClaim = iter.next();
+		while(iterator.hasNext()) {
+			tmpClaim = iterator.next();
 			
 			if (status.equals(tmpClaim.getStatus())) {
 				result.add(tmpClaim);
 			}
 		}
+		
+		iterator = null;
+		tmpClaim = null;
+		
 		return result;
 	}
 	
 	public List<Claim> filterClaims() {
-		List<Claim> result = new LinkedList<Claim>();
-		Claim tmpClaim;
-		Iterator<Claim> iter = claims.iterator();
+		result = new LinkedList<Claim>();
+		iterator = claims.iterator();
 		
-		while(iter.hasNext()) {
-			tmpClaim = iter.next();
+		while(iterator.hasNext()) {
+			tmpClaim = iterator.next();
 			
 			if (tmpClaim.getPaid()) {
 				result.add(tmpClaim);
 			}
 		}
+		iterator = null;
+		tmpClaim = null;
+		
 		return result;
 	}
 		
 	
 	public Claim searchClaim(String licencePlate) {
 		Claim result = null;
-		Claim tmpClaim;
-		Iterator<Claim> iter = claims.iterator();
+		iterator = claims.iterator();
 		
-		while(iter.hasNext()) {
-			tmpClaim = iter.next();
+		while(iterator.hasNext()) {
+			tmpClaim = iterator.next();
 			
 			if (licencePlate.equals(tmpClaim.getLicensePlate())) {
 				result = tmpClaim;
 			}
 		}
-
+		iterator = null;
+		tmpClaim = null;
+		
 		return result;
 	}
 }

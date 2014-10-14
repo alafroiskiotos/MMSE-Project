@@ -6,7 +6,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import se.kth.carins.Business.ClaimFunc;
-import se.kth.carins.Business.ClientFunc;
 import se.kth.carins.Entities.Claim;
 import se.kth.carins.Entities.Client;
 import se.kth.carins.Entities.Employee;
@@ -14,16 +13,14 @@ import se.kth.carins.Entities.Employee;
 public class ClaimTest {
 	private static Claim claim0;
 	private static Client client0;
-	private static ClientFunc clientFunc;
 	private static ClaimFunc claimFunc;
 	
 	@BeforeClass
 	public static void Before() {
-		clientFunc = new ClientFunc();
 		claimFunc = new ClaimFunc();
 		char[] pwd = {'1', '2', '3', '4'};
 		Employee employee = new Employee("Michael", pwd, "finance");
-		client0 = new Client("john", "john@mail.se", "4354", "yar3425");
+		client0 = new Client("john", "john@mail.se", "4354", "yar3425", "10000");
 		claim0 = new Claim("john", "crash", "yar3425", "0703485", "john@mail.se", employee);
 		claim0.setCost(100f);
 		client0.addClaimToHistory(claim0);
