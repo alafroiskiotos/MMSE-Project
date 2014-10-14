@@ -1,5 +1,7 @@
 package se.kth.carins.Business;
 
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import se.kth.carins.Entities.Claim;
@@ -22,6 +24,22 @@ public class ClaimFunc {
 		return claims;
 	}
 	
+	public List<Claim> filterClaims(String status) {
+		List<Claim> result = new LinkedList<Claim>();
+		Claim tmpClaim;
+		Iterator<Claim> iter = claims.iterator();
+		
+		while(iter.hasNext()) {
+			tmpClaim = iter.next();
+			
+			if (status.equals(tmpClaim.getStatus())) {
+				result.add(tmpClaim);
+			}
+		}
+
+		return result;
+	}
+	
 	public void categorize(Claim claim) {
 		String name = claim.getCustomerName();
 		System.out.println(name);
@@ -39,5 +57,21 @@ public class ClaimFunc {
 	
 	public void updateStatus(Claim claim, String status) {
 		claim.setStatus(status);
+	}
+	
+	public Claim searchClaim(String licencePlate) {
+		Claim result = null;
+		Claim tmpClaim;
+		Iterator<Claim> iter = claims.iterator();
+		
+		while(iter.hasNext()) {
+			tmpClaim = iter.next();
+			
+			if (licencePlate.equals(tmpClaim.getLicensePlate())) {
+				result = tmpClaim;
+			}
+		}
+
+		return result;
 	}
 }

@@ -39,5 +39,8 @@ public class ClaimTest {
 		char[] pwd = { '1', '2', '3', '4'};
 		assertArrayEquals(pwd, claim0.getEmployee().getPassword());
 		assertEquals(100f, claim0.getCost(), 2);
+		assertEquals(false,claim0.getPaid());
+		claim0.setPaid();
+		assertEquals(true,claim0.getPaid());
 	}
 }
