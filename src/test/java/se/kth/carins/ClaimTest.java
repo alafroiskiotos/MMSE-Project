@@ -20,6 +20,7 @@ public class ClaimTest {
 	@BeforeClass
 	public static void Before() {
 		clientFunc = new ClientFunc();
+		claimFunc = new ClaimFunc();
 		char[] pwd = {'1', '2', '3', '4'};
 		Employee employee = new Employee("Michael", pwd, "finance");
 		client0 = new Client("john", "john@mail.se", "4354", "yar3425");
@@ -27,6 +28,8 @@ public class ClaimTest {
 		claim0.setCost(100f);
 		client0.addClaimToHistory(claim0);
 		claim0.setCategory("simple");
+		claim0.setPaid();
+		claimFunc.addClaim(claim0);
 	}
 	
 	@Test
@@ -38,9 +41,23 @@ public class ClaimTest {
 		assertEquals("john@mail.se", claim0.getCustomerEmail());
 		char[] pwd = { '1', '2', '3', '4'};
 		assertArrayEquals(pwd, claim0.getEmployee().getPassword());
-		assertEquals(100f, claim0.getCost(), 2);
-		assertEquals(false,claim0.getPaid());
-		claim0.setPaid();
+		assertEquals(100f, claim0.getCost(), 2);		
 		assertEquals(true,claim0.getPaid());
+		assertNotNull(claim0.getRegistrationDate());
+		assertEquals("simple",claim0.getCategory());
+	}
+	@Test
+	public void testClaimFunc(){
+		assertNotEquals(0,claimFunc.getAllClaims().size());
+		assertNotEquals(0,claimFunc.filterClaims().size());
+		assertEquals(1 ,claimFunc.filterClaims("registered").size());
+		assertNotNull(claimFunc.searchClaim("yar3425"));		
+	}
+	@Test
+	public void testClaimFunc2(){
+		assertEquals(1,claimFunc.getAllClaims().size());
+		assertEquals(1,claimFunc.filterClaims().size());
+		assertNotEquals(0 ,claimFunc.filterClaims("registered").size());
+		assertNull(claimFunc.searchClaim("yar34a25"));		
 	}
 }

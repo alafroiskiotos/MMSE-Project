@@ -64,7 +64,6 @@ public class ClientFunc {
 
 	public boolean hasRegisteredClaim(CustomerForm form) {
 		String name = form.getCustomerName();
-		String email = form.getCustomerEmail();
 		String licencePlate = form.getLicensePlate();
 		boolean result = false;
 		Claim tmpClaim;

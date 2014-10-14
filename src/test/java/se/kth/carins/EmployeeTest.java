@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import se.kth.carins.Business.UsersFunc;
 import se.kth.carins.Entities.Employee;
-import se.kth.carins.storage.Storage;
 
 public class EmployeeTest {
 	private static Employee employee;
@@ -24,6 +23,7 @@ public class EmployeeTest {
 	@Test
 	public void username() {
 		assertEquals("name", employee.getUsername());
+		assertEquals("finance", employee.getAcl());
 	}
 
 	@Test
@@ -37,5 +37,8 @@ public class EmployeeTest {
 		char[] pwd = { '1', '2', '3', '4'};
 		assertEquals("finance", users.getUser("name", pwd));
 		assertEquals("0", users.getUser("notexistingname", pwd));
+		
+		assertNotNull(users.getEmployee("name", pwd));
+		assertNull(users.getEmployee("wrong", pwd));
 	}
 }

@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import se.kth.carins.Business.CustomerFormFunc;
 import se.kth.carins.Entities.CustomerForm;
-import se.kth.carins.storage.Storage;
 
 public class CustomerFormTest {
 	private static CustomerForm form0;

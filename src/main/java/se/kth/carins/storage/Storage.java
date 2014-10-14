@@ -32,16 +32,16 @@ public class Storage {
 	}
 	
 	
-	public static List<Employee> getSystemUsersList() {
+	public List<Employee> getSystemUsersList() {
 		return systemUsers;
 	}
-	public static List<CustomerForm> getCustomerForms() {
+	public List<CustomerForm> getCustomerForms() {
 		return customerForms;
 	}
-	public static List<Claim> getClaims() {
+	public List<Claim> getClaims() {
 		return claims;
 	}
-	public static List<Client> getClients() {
+	public List<Client> getClients() {
 		return clients;
 	}
 }

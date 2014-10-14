@@ -15,29 +15,51 @@ public class ClientTest {
 	private static ClientFunc clientFunc;
 	private static Claim claim0;
 	private static Client client;
+	private static CustomerForm formData;
+	private static CustomerForm wrongData;
 	
 	@BeforeClass
 	public static void Before() {
-		client = new Client("nikos", "anestos@kth.se", "4546", "licencePlate");
+		client = new Client("nikos", "anestos@kth.se", "0703485", "licencePlate");
 		clientFunc = new ClientFunc();
 		clientFunc.addClient(client);
 		
 		char[] pwd = { '1', '2', '3', '4'};
 		Employee employee = new Employee("Michael", pwd, "finance");
+		claim0 = new Claim("nikos", "crash", "licencePlate", "0703485", "anestos@kth.se", employee);
+		claim0.setCategory("complex");
 		
-		claim0 = new Claim("nikos", "crash", "licencePlate", "0703485", "john@mail.se", employee);
-		
-		Client client0 = clientFunc.getClient(claim0.getCustomerName(), claim0.getLicensePlate());
-		client0.addClaimToHistory(claim0);
-		if (clientFunc.hasHistory(client0) > 0)
-			claim0.setCategory("complex");
-		else
-			claim0.setCategory("simple");
+		formData = new CustomerForm("nikos", "accidentDescription", "licencePlate", "anestos@kth.se", "0703485");
+		wrongData = new CustomerForm("zzz", "zzz", "zzz", "zzz", "zzz");
 	}
-	
 	@Test
-	public void testHistory(){
+	public void testClientEntity(){
+		assertEquals("nikos", client.getName());
+		assertEquals("anestos@kth.se", client.getEmail());
+		assertEquals("0703485", client.getPhone());
+		assertEquals("licencePlate", client.getLicensePlate());
+	}
+	@Test
+	public void testClientEntity2(){
+		assertEquals(0,client.getClaimHistory().size());
+		assertEquals(new Integer(0), clientFunc.hasHistory(client));
+		assertFalse(clientFunc.hasRegisteredClaim(formData));
+		
+		client.addClaimToHistory(claim0);
+		assertEquals(1,client.getClaimHistory().size());
 		assertEquals(new Integer(1), clientFunc.hasHistory(client));
+		assertTrue(clientFunc.hasRegisteredClaim(formData));
+	}
+	@Test
+	public void testClient3(){
+		assertNotNull(clientFunc.getClient("nikos","licencePlate"));
+		assertNull(clientFunc.getClient("wrong","wrong"));
+		assertNotNull(clientFunc.searchClient("nikos"));
+		assertNotNull(clientFunc.searchClient("licencePlate"));
+		assertNotNull(clientFunc.searchClient("0703485"));
+		assertNotNull(clientFunc.searchClient("anestos@kth.se"));
+		assertNull(clientFunc.searchClient("wrong"));
+	
 	}
 	@Test
 	public void testClaimCategory() {
@@ -45,9 +67,7 @@ public class ClientTest {
 	}
 	@Test
 	public void testIsClient() {
-		CustomerForm formData = new CustomerForm("nikos", "accidentDescription", "licencePlate", "anestos@kth.se", "customerPhone");
-		CustomerForm wrongData = new CustomerForm("zzz", "zzz", "zzz", "zzz", "zzz");
-
+		
 		assertEquals(true, clientFunc.isClient(formData));
 		assertEquals(false, clientFunc.isClient(wrongData));
 	}

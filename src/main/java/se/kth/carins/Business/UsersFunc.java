@@ -2,7 +2,6 @@ package se.kth.carins.Business;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import se.kth.carins.Entities.Employee;
