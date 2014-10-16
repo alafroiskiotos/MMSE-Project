@@ -108,15 +108,15 @@ public class ApplicationWindow {
 	// Insert Data
 	public void initializeData() {
 		formfunc = new CustomerFormFunc();
-		CustomerForm formData = new CustomerForm("nikos", "accidentDescription", "licencePlate", "anestos@kth.se", "customerPhone");
-		CustomerForm formDataz = new CustomerForm("antonis", "accidentDescription", "licencePlate", "antonis@kth.se", "customerPhone");
+		CustomerForm formData = new CustomerForm("nikos", "accident description", "IEB-8898", "anestos@kth.se", "0787872313");
+		CustomerForm formDataz = new CustomerForm("antonis", "accident Description", "IEK-5234", "antkou@kth.se", "0788637213");
 		formfunc.addCustomerForm(formData);
 		formfunc.addCustomerForm(formDataz);
 
 		UsersFunc userfunc = new UsersFunc();
 		char[] pwd = { '1', '2', '3', '4'};
 		Employee employeeFinance = new Employee("finance", pwd, "finance");
-		Employee employeeCDB = new Employee("empolyeeCDB", pwd, "CDB");
+		Employee employeeCDB = new Employee("employeeCDB", pwd, "CDB");
 		Employee employeeCDA = new Employee("employeeCDA", pwd, "CDA");
 		Employee employeeGarage = new Employee("garage", pwd, "garage");
 		userfunc.addUser(employeeFinance);
@@ -126,35 +126,49 @@ public class ApplicationWindow {
 
 
 		clientfunc = new ClientFunc();
-		Client client = new Client("nikos","anestos@kth.se","customerPhone", "licencePlate", "10000");
+		Client client = new Client("nikos","anestos@kth.se","0787872313", "IEB-8898", "10000");
 		Client client1 = new Client("client1", "email1", "phone1", "licencePlate1", "10000");
 		Client client2 = new Client("client2", "email2", "phone2", "licencePlate2", "10000");
-		Client client3 = new Client("client3", "email3", "phone3", "licencePlate3", "10000");
-		Client client4 = new Client("client4", "email4", "phone4", "licencePlate4", "10000");
+		Client client3 = new Client("client3", "email3", "phone3", "licencePlate3", "8000");
+		Client client4 = new Client("client4", "email4", "phone4", "licencePlate4", "9000");
+		Client client5 = new Client("antonis", "antkou@kth.se", "0788637213", "IEK-5234", "11000");
 		clientfunc.addClient(client);
-
 		clientfunc.addClient(client1);
 		clientfunc.addClient(client2);
 		clientfunc.addClient(client3);
 		clientfunc.addClient(client4);
+		clientfunc.addClient(client5);
 
 
 		claimfunc = new ClaimFunc();
-		Claim claim = new Claim("nikos","description","licencePlate","customerPhone","anestos@kth.se",employeeCDA);
-		Claim claim1 = new Claim("client1","description","licencePlate1","phone1","email1",employeeCDB);
-		Claim claim2 = new Claim("client2","description","licencePlate2","phone2","email2",employeeCDA);
+		Claim claim = new Claim("nikos","accident description","IEB-8898","0787872313","anestos@kth.se",employeeCDA);
+		Claim claim1 = new Claim("client1","accident description","licencePlate1","phone1","email1",employeeCDB);
+		Claim claim2 = new Claim("client2","accident description","licencePlate2","phone2","email2",employeeCDA);
+		Claim claim3 = new Claim("antonis","first accident description","IEK-5234","0788637213","antkou@kth.se",employeeCDA);
+		Claim claim4 = new Claim("antonis","second accident description","IEK-5234","0788637213","antkou@kth.se",employeeCDB);
 		claimfunc.addClaim(claim);
 		claimfunc.addClaim(claim1);
 		claimfunc.addClaim(claim2);
+		claimfunc.addClaim(claim3);
+		claimfunc.addClaim(claim4);
 		claim.setCategory("simple");
 		claim1.setCategory("simple");
 		claim2.setCategory("simple");
+		claim4.setCategory("simple");
+		claim3.setCategory("complex");
 		claim.setStatus("registered");
 		claim1.setStatus("registered");
 		claim2.setStatus("registered");
+		claim4.setStatus("OK");
+		claim4.setCost(1000f);
+		claim3.setStatus("archived");
+		claim3.setCost(500f);
+		claim3.setPaid();
 		client.addClaimToHistory(claim);
 		client1.addClaimToHistory(claim1);
 		client2.addClaimToHistory(claim2);
+		client5.addClaimToHistory(claim3);
+		client5.addClaimToHistory(claim4);
 	}
 
 

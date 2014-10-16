@@ -24,7 +24,7 @@ For each role in the program there are already available the following user acco
 
 username: finance		password: 1234
 username: employeeCDA	password: 1234
-username: empolyeeCDB	password: 1234
+username: employeeCDB	password: 1234
 username: garage		password: 1234
 
 Logging in the system with any of these accounts, will prompt the appropriate views.
